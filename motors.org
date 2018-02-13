@@ -1,0 +1,7 @@
+| index | motor         |
+|-------+---------------|
+|     0 | waist         |
+|     1 | main wheels   |
+|     2 | turning motor |
+|     3 | Head tilt     |
+|     4 | head turn     |
