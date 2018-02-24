@@ -1,7 +1,7 @@
 from tkinter import *
 from bodyControl import *
 from PIL import ImageTk
-from command_gui import *
+from MotorSettings import *
 
 
 class RoboWindow(Frame):
