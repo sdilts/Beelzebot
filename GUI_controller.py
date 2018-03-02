@@ -88,7 +88,7 @@ class RoboWindow(Frame):
         self.wait_button = Button(self.control_frame, text="Wait!", command = lambda: self.command_btn_pressed())
         self.wait_button.grid(row=0, column=3)
 
-        self.control_frame.grid(row=0, column=0)
+        self.control_frame.pack()
 
         # stuff for the programming frame:
         self.programming_frame = Frame(self,height=200)
@@ -97,7 +97,7 @@ class RoboWindow(Frame):
         self.command_q_frame = Frame(self.programming_frame, height=75,width=600,  bg="white")
         self.command_q_frame.grid(row=1)
 
-        self.programming_frame.grid(row=1, column=0)
+        self.programming_frame.pack()
 
 
         self.settings_frame = Frame(self)
@@ -108,13 +108,13 @@ class RoboWindow(Frame):
         self.entry_label = Label(self.settings_frame, text="Command Options")
         self.entry_label.grid(row=0, column=1)
 
-        self.entry_frame = Frame(self.settings_frame, width=500, height=100, bg="black")
+        self.entry_frame = Frame(self.settings_frame, width=500, height=100)
         self.entry_frame.grid(row=1, column=1)
 
         self.go_button = Button(self.settings_frame, text="Play!")
         self.go_button.grid(row=1, column=2)
 
-        self.settings_frame.grid(row=2, column=0)
+        self.settings_frame.pack()
 
 
 
@@ -136,6 +136,12 @@ class RoboWindow(Frame):
 
     def draw_entry_window(self,motor_command):
         # figure out what we need to draw based off what is in the object:
+        window = self.entry_frame
+        old_frames = window.winfo_children()
+        for old in old_frames:
+            old.pack_forget()
+        inner = motor_command.draw_settings(window)
+        inner.pack()
         pass
 
     def draw_command_q(self, toHighlight):
