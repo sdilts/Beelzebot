@@ -1,8 +1,11 @@
 from tkinter import *
+from tkinter import font
 from bodyControl import *
 from PIL import ImageTk
 from MotorSettings import *
 
+def foo():
+    print( "I'm a dummy function!")
 
 class RoboWindow(Frame):
 
@@ -30,6 +33,9 @@ class RoboWindow(Frame):
         self.img_wait = ImageTk.PhotoImage(file="./images/placeholder.jpg")
 
     def init_gui(self):
+        default_font = font.nametofont("TkDefaultFont")
+        default_font.configure(size=24)
+        self.master.option_add('*Font', default_font)
         self.master.title("Robot!")
         self.pack(fill=BOTH, expand=1)
 
@@ -37,10 +43,10 @@ class RoboWindow(Frame):
 
         # stuff for the entry_frame:
         self.waist_frame = Frame(self.control_frame)
-        self.waist_left = Button(self.waist_frame, text="waist left", # image = self.waist_img_left,
-                                 command = lambda: self.command_btn_pressed(self.controller.move_waist_left, 1, None, self.waist_img_left ))
+        self.waist_left =  Button(self.waist_frame, text="waist left", # image = self.waist_img_left,
+                                  command = lambda: self.command_btn_pressed(ServoSettings(self.controller.move_waist_left, 1, self.waist_img_left, 3)))
         self.waist_right = Button(self.waist_frame, text="waist right",
-                                  command = lambda: self.command_btn_pressed(self.controller.move_waist_right, 1, None, self.waist_img_right ))
+                                  command = lambda: self.command_btn_pressed(ServoSettings(self.controller.move_waist_right, 1, self.waist_img_right, 3)))
 
         self.waist_left.grid(row=0, column=0)
         self.waist_right.grid(row=0, column=1)
@@ -48,14 +54,14 @@ class RoboWindow(Frame):
 
 
         self.look_frame = Frame(self.control_frame)
-        self.look_up = Button(self.look_frame, text="look up",
-                              command = lambda: self.command_btn_pressed(self.controller.move_head_up, 1, None, self.img_look_up ))
-        self.look_down = Button(self.look_frame, text="look down",
-                                command = lambda: self.command_btn_pressed(self.controller.move_head_down, 1, None, self.img_look_down ))
-        self.look_left = Button(self.look_frame, text="look left",
-                                command = lambda: self.command_btn_pressed(self.controller.move_head_left, 1, None, self.img_look_left))
+        self.look_up =    Button(self.look_frame, text="look up",
+                                 command = lambda: self.command_btn_pressed(ServoSettings(self.controller.move_head_up, 1, self.img_look_up )))
+        self.look_down =  Button(self.look_frame, text="look down",
+                                 command = lambda: self.command_btn_pressed(ServoSettings(self.controller.move_head_down, 1, self.img_look_down )))
+        self.look_left =  Button(self.look_frame, text="look left",
+                                 command = lambda: self.command_btn_pressed(ServoSettings(self.controller.move_head_left, 1, self.img_look_left)))
         self.look_right = Button(self.look_frame, text="look right",
-                                 command = lambda: self.command_btn_pressed(self.controller.move_head_right, 1, None, self.img_look_right))
+                                 command = lambda: self.command_btn_pressed(ServoSettings(self.controller.move_head_right, 1, self.img_look_right)))
 
 
         self.look_up.grid(row=0, column=1)
@@ -65,14 +71,14 @@ class RoboWindow(Frame):
 
 
         self.move_frame = Frame(self.control_frame)
-        self.move_forward = Button(self.move_frame, text="forward",
-                                   command = lambda: self.command_btn_pressed(self.controller.setSpeed, 1, 1, self.img_move_forward ))
+        self.move_forward  = Button(self.move_frame, text="forward",
+                                    command = lambda: self.command_btn_pressed(MotorSettings(self.controller.setSpeed, 1, self.img_move_forward )))
         self.move_backward = Button(self.move_frame, text="backward",
-                                    command = lambda: self.command_btn_pressed(self.controller.setSpeed, -1, 1, self.img_move_backward ))
-        self.turn_left = Button(self.move_frame, text="turn left",
-                                command = lambda: self.command_btn_pressed(self.controller.setSpeed, None, 1, self.img_turn_left))
-        self.turn_right = Button(self.move_frame, text="turn right",
-                                 command = lambda: self.command_btn_pressed(self.controller.setSpeed, None, 1, self.img_turn_right ))
+                                    command = lambda: self.command_btn_pressed(MotorSettings(self.controller.setSpeed, 1, self.img_move_backward )))
+        self.turn_left     = Button(self.move_frame, text="turn left",
+                                    command = lambda: self.command_btn_pressed(MotorSettings(self.controller.setSpeed, 1, self.img_turn_left, maxSpeed=1)))
+        self.turn_right    = Button(self.move_frame, text="turn right",
+                                    command = lambda: self.command_btn_pressed(MotorSettings(self.controller.setSpeed, 1, self.img_turn_right, maxSpeed=1 )))
 
 
         self.move_forward.grid(row=0, column=1)
@@ -85,7 +91,8 @@ class RoboWindow(Frame):
         self.look_frame.grid(row=0, column=1)
         self.move_frame.grid(row=0, column=2)
 
-        self.wait_button = Button(self.control_frame, text="Wait!", command = lambda: self.command_btn_pressed())
+        self.wait_button = Button(self.control_frame, text="Wait!",
+                                  command = lambda: self.command_btn_pressed(WaitSettings(foo, 1, self.img_wait)))
         self.wait_button.grid(row=0, column=3)
 
         self.control_frame.pack()
@@ -118,8 +125,7 @@ class RoboWindow(Frame):
 
 
 
-    def command_btn_pressed(self,function_to_call,speed_or_position, time, img):
-        newCommand = MotorSettings(function_to_call, speed_or_position, time, img)
+    def command_btn_pressed(self,newCommand):
         if len(self.command_list) == 0:
             self.command_list.insert(self.cur_selected_indx, newCommand)
             self.selectButton(self.cur_selected_indx)
