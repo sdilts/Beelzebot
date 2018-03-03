@@ -136,12 +136,23 @@ class RoboWindow(Frame):
         self.entry_frame = Frame(self.settings_frame, width=500, height=100)
         self.entry_frame.grid(row=1, column=1)
 
-        self.go_button = Button(self.settings_frame, text="Play!", image=self.img_play)
+        self.go_button = Button(self.settings_frame, text="Play!", image=self.img_play, command=self.play)
         self.go_button.grid(row=1, column=2)
 
         self.settings_frame.pack()
 
 
+    def play(self):
+        commands = self.command_seq_gen()
+        print("\n\nCommands:")
+        for cmd in commands:
+            print("Running: ", cmd)
+
+    def command_seq_gen(self):
+        command_seq = []
+        for cmd in self.command_list:
+            command_seq.append(cmd.gen_command())
+        return command_seq
 
     def command_btn_pressed(self,newCommand):
         if len(self.command_list) == 0:
