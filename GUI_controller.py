@@ -1,5 +1,6 @@
 import time
-from robotAnimation import *
+import _thread
+import robotAnimation as ra
 from tkinter import *
 from tkinter import font
 from bodyControl import *
@@ -20,6 +21,7 @@ class RoboWindow(Frame):
         self.controller = RobotController()
         self.load_images()
         self.init_gui()
+        self.animation_obj = ra.DrawingStuff()
         pad = 3
         self._geom='200x200+0+0'
         master.geometry("{0}x{1}+0+0".format(
@@ -61,8 +63,10 @@ class RoboWindow(Frame):
         self.master.option_add('*Font', default_font)
         self.master.title("Robot!")
         self.pack(fill=BOTH, expand=1)
+        self.input_frame = Frame(self)
+        self.input_frame.pack()
 
-        self.control_frame = Frame(self)
+        self.control_frame = Frame(self.input_frame)
 
         # stuff for the entry_frame:
         self.waist_frame = Frame(self.control_frame)
@@ -131,7 +135,7 @@ class RoboWindow(Frame):
         self.control_frame.pack(pady=5)
 
         # stuff for the programming frame:
-        self.programming_frame = Frame(self,height=200)
+        self.programming_frame = Frame(self.input_frame,height=200)
         self.programming_label = Label(self.programming_frame, text="Commands:", image=self.img_command)
         self.programming_label.grid(row=0)
         self.command_q_frame = Frame(self.programming_frame, height=75,width=400)
@@ -140,7 +144,7 @@ class RoboWindow(Frame):
         self.programming_frame.pack(pady=5)
 
 
-        self.settings_frame = Frame(self)
+        self.settings_frame = Frame(self.input_frame)
 
         self.trash_button = Button(self.settings_frame, text="Trash", image=self.img_trash, command=self.trashButton)
         self.trash_button.grid(row=1, column=0, padx=50)
@@ -160,9 +164,28 @@ class RoboWindow(Frame):
 
     def play(self):
         commands = self.command_seq_gen()
-        print("\n\nCommands:")
-        for cmd in commands:
-            print("Running: ", cmd)
+        dummy_frame = Frame(self, bg="black", width=100, height=100)
+
+        def run_commands(callback_func):
+            print("\n\nCommands:")
+            # self.controller.reset_pos()
+            for cmd in commands:
+                print("Running: ", cmd)
+                # cmd()
+            # self.controller.stop_moving()
+            time.sleep(5)
+            callback_func()
+
+        def restore_config():
+            dummy_frame.pack_forget()
+            self.input_frame.pack()
+
+        self.input_frame.pack_forget()
+        dummy_frame.pack()
+
+        thread = _thread.start_new_thread(run_commands,tuple([restore_config]))
+
+        print("Thread: ", thread)
 
     def command_seq_gen(self):
         command_seq = []
@@ -243,7 +266,7 @@ def main():
         #_thread.start_new_thread(showAndTellAdventures, (paint, ))
     except:
        print ("Error: unable to start thread")
-    try:   
+    try:
         _thread.start_new_thread(showAndTellAdventures, (paint, ))
     except:
        print ("Error: unable to start thread")
