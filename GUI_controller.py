@@ -1,7 +1,7 @@
 import time
 import threading
 import _thread
-import robotAnimation as ra
+#import robotAnimation as ra
 from tkinter import *
 from tkinter import font
 from bodyControl import *
@@ -46,16 +46,16 @@ class RoboWindow(Frame):
 
 
     def load_images(self):
-        self.waist_img_left = ImageTk.PhotoImage(file="./robot images/waist_left.png")
-        self.waist_img_right =ImageTk.PhotoImage(file="./robot images/waist_right.png")
+        self.waist_img_left = ImageTk.PhotoImage(file="./robot images/waist_right.png")
+        self.waist_img_right =ImageTk.PhotoImage(file="./robot images/waist_left.png")
 
-        self.img_waist_left_small  = ImageTk.PhotoImage(file="./robot images/waist_left_small.png")
-        self.img_waist_right_small = ImageTk.PhotoImage(file="./robot images/waist_right_small.png")
+        self.img_waist_left_small  = ImageTk.PhotoImage(file="./robot images/waist_right_small.png")
+        self.img_waist_right_small = ImageTk.PhotoImage(file="./robot images/waist_left_small.png")
 
         self.img_look_up = ImageTk.PhotoImage(file="./robot images/look_up.png")
         self.img_look_down = ImageTk.PhotoImage(file="./robot images/look_down.png")
-        self.img_look_left = ImageTk.PhotoImage(file="./robot images/look_left.png")
-        self.img_look_right = ImageTk.PhotoImage(file="./robot images/look_right.png")
+        self.img_look_left = ImageTk.PhotoImage(file="./robot images/look_right.png")
+        self.img_look_right = ImageTk.PhotoImage(file="./robot images/look_left.png")
         self.img_move_forward = ImageTk.PhotoImage(file="./robot images/up.png")
         self.img_move_backward = ImageTk.PhotoImage(file="./robot images/down.png")
         self.img_turn_right = ImageTk.PhotoImage(file="./robot images/right.png")
@@ -85,8 +85,8 @@ class RoboWindow(Frame):
         self.waist_right = Button(self.waist_frame, text="waist right", image=self.waist_img_right,
                                   command = lambda: self.command_btn_pressed(ServoSettings(self.controller.move_waist_right, 0, self.img_waist_right_small, 3)))
 
-        self.waist_left.grid(row=0, column=0)
-        self.waist_right.grid(row=0, column=1)
+        self.waist_right.grid(row=0, column=0)
+        self.waist_left.grid(row=0, column=1)
 
 
 
@@ -107,8 +107,8 @@ class RoboWindow(Frame):
 
         self.look_up.grid(row=0, column=1)
         self.look_down.grid(row=1, column=1)
-        self.look_left.grid(row=1, column=0)
-        self.look_right.grid(row=1, column=3)
+        self.look_right.grid(row=1, column=0)
+        self.look_left.grid(row=1, column=3)
         #self.look_frame.pack(padx=10)
 
         self.move_frame = Frame(self.control_frame)
@@ -178,12 +178,11 @@ class RoboWindow(Frame):
 
         def run_commands(callback_func):
             print("\n\nCommands:")
-            # self.controller.reset_pos()
+            self.controller.reset_pos()
             for cmd in commands:
                 print("Running: ", cmd)
-                # cmd()
+                cmd()
             self.controller.stop_moving()
-            time.sleep(5)
             callback_func()
 
         def restore_config(thread):
