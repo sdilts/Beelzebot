@@ -58,7 +58,8 @@ class MotorSettings(CommandSettings):
             self.opt_frame = tk.Frame(parent_frame, width=self.frame_width)
 
             speedLabel = tk.Label(self.opt_frame, text="Speed:")
-            self.speedEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxSpeed, width=20)
+            self.speedEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL,
+                                       from_=.25, to=self.maxSpeed, increment=.25, width=20)
             self.speedEntry.set(self.speed)
             speedLabel.grid(row=1,column=0)
             self.speedEntry.grid(row=1,column=1)
