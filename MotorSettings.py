@@ -81,8 +81,13 @@ class ServoSettings(CommandSettings):
         return "(Function: {}, Repeats: {})".format(self.function_to_call, self.repeats)
 
     def gen_command(self):
+        repeat_num = self.repeatEntry.get()
         print("Command: ", self.function_to_call, "Repeats: ", self.repeatEntry.get())
-        return lambda: self.function_to_call(self.repeatEntry.get())
+        def do_stuff():
+            self.function_to_call()
+            for i in range(repeat_num):
+                self.function_to_call()
+        return do_stuff
 
 
     def draw_settings(self, parent_frame):

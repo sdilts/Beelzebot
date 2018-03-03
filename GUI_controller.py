@@ -1,11 +1,12 @@
+import time
 from tkinter import *
 from tkinter import font
 from bodyControl import *
 from PIL import ImageTk
 from MotorSettings import *
 
-def foo():
-    print( "I'm a dummy function!")
+def wait(sleep_time):
+    time.sleep(sleep_time)
 
 class RoboWindow(Frame):
 
@@ -122,7 +123,7 @@ class RoboWindow(Frame):
 
         self.wait_button = Button(self.control_frame, text="Wait!",
                                   image=self.img_wait,
-                                  command = lambda: self.command_btn_pressed(WaitSettings(foo, 1, self.img_wait)))
+                                  command = lambda: self.command_btn_pressed(WaitSettings(wait, 1, self.img_wait)))
         self.wait_button.grid(row=0, column=3)
 
         self.control_frame.pack(pady=10)
