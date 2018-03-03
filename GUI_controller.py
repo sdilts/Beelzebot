@@ -1,4 +1,5 @@
 import time
+import threading
 import _thread
 import robotAnimation as ra
 from tkinter import *
@@ -21,7 +22,7 @@ class RoboWindow(Frame):
         self.controller = RobotController()
         self.load_images()
         self.init_gui()
-        self.init_face()
+        self.face_frame = ra.DrawingStuff(self)
         pad = 3
         self._geom='200x200+0+0'
         master.geometry("{0}x{1}+0+0".format(
@@ -34,12 +35,13 @@ class RoboWindow(Frame):
         self.master.geometry(self._geom)
         self._geom=geom
 
-    def init_face(self):
-        self.face_frame = ra.DrawingStuff(self)
-        try:
-            _thread.start_new_thread(self.face_frame.make_face,())
-        except:
-            print ("Error: unable to start thread")
+    def start_face(self):
+        self.face_frame
+        self.face_frame.pack()
+        self.face_frame.changeFlag()
+        thread = threading.Thread(target=self.face_frame.make_face)
+        thread.start()
+        return thread
 
 
 
@@ -184,15 +186,15 @@ class RoboWindow(Frame):
             time.sleep(5)
             callback_func()
 
-        def restore_config():
+        def restore_config(thread):
             self.face_frame.pack_forget()
             self.face_frame.changeFlag()
+            thread.join()
             self.input_frame.pack()
 
         self.input_frame.pack_forget()
-        self.face_frame.pack()
-        self.face_frame.changeFlag()
-        thread = _thread.start_new_thread(run_commands,tuple([restore_config]))
+        thread = self.start_face()
+        _thread.start_new_thread(run_commands,tuple([lambda: restore_config(thread)]))
 
         print("Thread: ", thread)
 

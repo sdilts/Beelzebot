@@ -67,37 +67,37 @@ class DrawingStuff(tk.Frame):
 
         self.canvas.create_polygon(self.head_x+self.head_width+30,self.head_y-10, self.head_x+self.head_width+30, self.head_y-40,
                                   self.head_x+self.head_width+60,self.head_y-10,fill = 'orange')
-        while(True):
-            while(self.flag):
 
-                self.canvas.create_polygon(self.head_x, self.head_y+self.head_height, self.head_x+self.head_width, self.head_y+self.head_height,
-                                      self.head_x + (self.head_width/2), self.head_y+(self.head_height*2),fill = 'red')
+        while(self.flag):
 
-                #eyes
-                self.eye(self.eye_x, self.eye_y, self.eye_r, "eye", "white")
-                self.eye(self.eye_x+self.distance, self.eye_y, self.eye_r, "eye", "white")
+            self.canvas.create_polygon(self.head_x, self.head_y+self.head_height, self.head_x+self.head_width, self.head_y+self.head_height,
+                                  self.head_x + (self.head_width/2), self.head_y+(self.head_height*2),fill = 'red')
 
-                self.eye(self.eye_x+i, self.eye_y+j, self.pupil_r, "pupil", "black")
-                self.eye(self.eye_x+self.distance+i, self.eye_y+j, self.pupil_r, "pupil", "black")
+            #eyes
+            self.eye(self.eye_x, self.eye_y, self.eye_r, "eye", "white")
+            self.eye(self.eye_x+self.distance, self.eye_y, self.eye_r, "eye", "white")
 
-                #mouth
-                self.canvas.create_polygon(self.mouth_x, self.mouth_y, self.mouth_x+self.mouth_width, self.mouth_y,
-                                      self.mouth_x+(self.mouth_width/2)-(i/2), self.mouth_y+(self.mouth_width/4)-(i/4), fill = 'black')
-                self.root.update()
-                time.sleep(self.speed)
+            self.eye(self.eye_x+i, self.eye_y+j, self.pupil_r, "pupil", "black")
+            self.eye(self.eye_x+self.distance+i, self.eye_y+j, self.pupil_r, "pupil", "black")
 
-    ##            self.eye(self.eye_x, self.eye_y, self.pupil_r, "pupil", "black")
-    ##            self.eye(self.eye_x+self.distance, self.eye_y, self.pupil_r, "pupil", "black")
-    ##            self.root.update()
-    ##            time.sleep(self.speed)
-                if i == 70:
-                    aflag = True
-                elif i == -70:
-                    aflag = False
-                if aflag:
-                    i -=10
-                else:
-                    i +=10
+            #mouth
+            self.canvas.create_polygon(self.mouth_x, self.mouth_y, self.mouth_x+self.mouth_width, self.mouth_y,
+                                  self.mouth_x+(self.mouth_width/2)-(i/2), self.mouth_y+(self.mouth_width/4)-(i/4), fill = 'black')
+            self.root.update()
+            time.sleep(self.speed)
+
+##            self.eye(self.eye_x, self.eye_y, self.pupil_r, "pupil", "black")
+##            self.eye(self.eye_x+self.distance, self.eye_y, self.pupil_r, "pupil", "black")
+##            self.root.update()
+##            time.sleep(self.speed)
+            if i == 70:
+                aflag = True
+            elif i == -70:
+                aflag = False
+            if aflag:
+                i -=10
+            else:
+                i +=10
 
 
 
