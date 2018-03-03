@@ -1,4 +1,5 @@
 import time
+import threading
 import _thread
 #import robotAnimation as ra
 from tkinter import *
@@ -21,7 +22,7 @@ class RoboWindow(Frame):
         self.controller = RobotController()
         self.load_images()
         self.init_gui()
-        #self.animation_obj = ra.DrawingStuff()
+        self.face_frame = ra.DrawingStuff(self)
         pad = 3
         self._geom='200x200+0+0'
         master.geometry("{0}x{1}+0+0".format(
@@ -33,6 +34,15 @@ class RoboWindow(Frame):
         print(geom,self._geom)
         self.master.geometry(self._geom)
         self._geom=geom
+
+    def start_face(self):
+        self.face_frame
+        self.face_frame.pack()
+        self.face_frame.changeFlag()
+        thread = threading.Thread(target=self.face_frame.make_face)
+        thread.start()
+        return thread
+
 
 
     def load_images(self):
@@ -175,17 +185,17 @@ class RoboWindow(Frame):
                 print("Running: ", cmd)
                 cmd()
             self.controller.stop_moving()
-            #time.sleep(5)
             callback_func()
 
-        def restore_config():
-            dummy_frame.pack_forget()
+        def restore_config(thread):
+            self.face_frame.pack_forget()
+            self.face_frame.changeFlag()
+            thread.join()
             self.input_frame.pack()
 
         self.input_frame.pack_forget()
-        dummy_frame.pack()
-
-        thread = _thread.start_new_thread(run_commands,tuple([restore_config]))
+        thread = self.start_face()
+        _thread.start_new_thread(run_commands,tuple([lambda: restore_config(thread)]))
 
         print("Thread: ", thread)
 
@@ -259,9 +269,7 @@ def showAndTellAdventures(paint):
     paint.hide()
 
 def main():
-
     root = Tk()
-    
     f = RoboWindow(root)
     root.mainloop()
 
