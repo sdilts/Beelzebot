@@ -1,4 +1,5 @@
 import time
+from robotAnimation import *
 from tkinter import *
 from tkinter import font
 from bodyControl import *
@@ -223,9 +224,30 @@ class RoboWindow(Frame):
             newBtn.grid(row=0, column=indx)
         self.command_q_frame.grid(row=1)
 
+def showAndTellAdventures(paint):
+    for i in range(150):
+        print("**" + i)
+    paint.hide()
+    time.sleep(2)
+    paint.show()
+    time.sleep(2)
+    paint.hide()
+
 def main():
+
     root = Tk()
-    f = RoboWindow(root)
+    paint = DrawingStuff(root)
+    ######Start a new Thread
+    try:
+        _thread.start_new_thread(paint.make_face,())
+        #_thread.start_new_thread(showAndTellAdventures, (paint, ))
+    except:
+       print ("Error: unable to start thread")
+    try:   
+        _thread.start_new_thread(showAndTellAdventures, (paint, ))
+    except:
+       print ("Error: unable to start thread")
+    #f = RoboWindow(root)
     root.mainloop()
 
 

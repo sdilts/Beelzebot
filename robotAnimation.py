@@ -107,11 +107,18 @@ class DrawingStuff():
     def changeFlag(self):
         for i in range(100):
             print (i)
-        while(i != "Stop"):
-            i = 7
+        #if self.flag == True:        
+        #    self.flag = False
+        #else:
+        #    self.flag = True
+   
+    def show(self):
+        self.canvas.grid()
+        print("Showing!")
 
-                
-        self.flag = False
+    def hide(self):
+        self.canvas.grid_forget()
+        print("Hiding...")
         
     def drawEyes(self):
         midRow = int(self.canvasH/2)
@@ -131,9 +138,7 @@ class DrawingStuff():
             self.c.create_oval(midCol+5, 5, self.canvasW, self.canvasH-40, fill="#000000")
             self.c.create_oval(leftRow, leftCol, leftRow-100, leftCol+100, fill="#ffffff")
             self.c.create_oval(500, 220, 600, 320, fill="#ffffff")
-            self.root.update()
-            time.sleep(self.speed)
-           
+            self.root.update()     
   
 def __main__():
 
