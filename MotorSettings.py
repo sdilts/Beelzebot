@@ -20,14 +20,16 @@ class WaitSettings(CommandSettings):
 
     def gen_command(self):
         print("Command: ", self.function_to_call, "wait: ", self.waitEntry.get())
-        return lambda: self.function_to_call(int(self.waitEntry.get()))
+        return lambda: self.function_to_call(float(self.waitEntry.get()))
 
     def draw_settings(self, parent_frame):
         if (self.opt_frame == None):
             self.opt_frame = tk.Frame(parent_frame, width=self.frame_width)
 
             waitLabel = tk.Label(self.opt_frame, text="Wait Time:")
-            self.waitEntry = tk.Spinbox(self.opt_frame, from_=1, to=self.maxWait, width=3, font = Font(family = 'Helvetica', size = 36))
+            self.waitEntry = tk.Spinbox(self.opt_frame, from_=.25, to=self.maxWait,
+                                        increment=.25, width=4,
+                                        format='%.2f', font = Font(family = 'Helvetica', size = 36))
             waitLabel.grid(row=1,column=0)
             self.waitEntry.grid(row=1,column=1)
         return self.opt_frame
@@ -59,7 +61,7 @@ class MotorSettings(CommandSettings):
 
             speedLabel = tk.Label(self.opt_frame, text="Speed:")
             self.speedEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL,
-                                       from_=.25, to=self.maxSpeed, increment=.25, width=20)
+                                       from_=1, to=self.maxSpeed, width=20)
             self.speedEntry.set(self.speed)
             speedLabel.grid(row=1,column=0)
             self.speedEntry.grid(row=1,column=1)
