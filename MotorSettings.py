@@ -4,23 +4,30 @@ class CommandSettings:
     def __init__(self, img):
         self.img = img
 
+    def gen_command(self):
+        pass
+
 class WaitSettings(CommandSettings):
 
     def __init__(self, function_to_call, wait_time, img, maxWait=100):
         CommandSettings.__init__(self, img)
+        self.function_to_call = function_to_call
         self.opt_frame = None
         self.wait_time = wait_time
         self.maxWait=100
 
+    def gen_command(self):
+        print("Command: ", self.function_to_call, "wait: ", self.waitEntry.get())
+        return lambda: self.function_to_call(int(self.waitEntry.get()))
 
     def draw_settings(self, parent_frame):
         if (self.opt_frame == None):
             self.opt_frame = tk.Frame(parent_frame)
 
             waitLabel = tk.Label(self.opt_frame, text="Wait Time:")
-            waitEntry = tk.Spinbox(self.opt_frame, from_=1, to=self.maxWait)
+            self.waitEntry = tk.Spinbox(self.opt_frame, from_=1, to=self.maxWait)
             waitLabel.grid(row=1,column=0)
-            waitEntry.grid(row=1,column=1)
+            self.waitEntry.grid(row=1,column=1)
         return self.opt_frame
 
 
@@ -39,19 +46,21 @@ class MotorSettings(CommandSettings):
     def __str__(self):
         return "(Function: {}, speed: {})".format(self.function_to_call, self.speed)
 
+
+    def gen_command(self):
+        print("Command: ", self.function_to_call, "Speed: ", self.speedEntry.get())
+        return lambda: self.function_to_call(self.speedEntry.get())
+
     def draw_settings(self, parent_frame):
         if (self.opt_frame == None):
             self.opt_frame = tk.Frame(parent_frame)
 
             speedLabel = tk.Label(self.opt_frame, text="Speed:")
-            speedEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxSpeed)
-            speedEntry.set(self.speed)
+            self.speedEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxSpeed)
+            self.speedEntry.set(self.speed)
             speedLabel.grid(row=1,column=0)
-            speedEntry.grid(row=1,column=1)
+            self.speedEntry.grid(row=1,column=1)
         return self.opt_frame
-
-    def verify_new_settings(new_settings):
-        pass
 
 class ServoSettings(CommandSettings):
 
@@ -70,16 +79,18 @@ class ServoSettings(CommandSettings):
     def __str__(self):
         return "(Function: {}, Repeats: {})".format(self.function_to_call, self.repeats)
 
+    def gen_command(self):
+        print("Command: ", self.function_to_call, "Repeats: ", self.repeatEntry.get())
+        return lambda: self.function_to_call(self.repeatEntry.get())
+
+
     def draw_settings(self, parent_frame):
         if (self.opt_frame == None):
             self.opt_frame = tk.Frame(parent_frame)
 
             repeatLabel = tk.Label(self.opt_frame, text="Repeats:")
-            repeatEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxRepeats)
-            repeatEntry.set(self.repeats)
+            self.repeatEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxRepeats)
+            self.repeatEntry.set(self.repeats)
             repeatLabel.grid(row=1,column=0)
-            repeatEntry.grid(row=1,column=1)
+            self.repeatEntry.grid(row=1,column=1)
         return self.opt_frame
-
-    def verify_new_settings(new_settings):
-        return True
