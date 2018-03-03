@@ -31,8 +31,14 @@ class RobotController:
 
     def __init__(self):
         self.controller = ma.Controller()
-    #    self.controller.setAccel(self.move_channel, 0)
-    #    self.controller.setSpeed(self.move_channel, 1)
+        self.controller.setAccel(self.head_v_channel, 8)
+        self.controller.setAccel(self.head_h_channel, 8)
+        self.controller.setAccel(self.waist_channel, 8)
+        self.controller.setAccel(self.move_channel, 1)
+        self.controller.setSpeed(self.turn_channel, 0)
+
+    def clean_up():
+        pass
 
     def stop(self):
         self.controller.setTarget(self.move_channel, 0)
@@ -95,10 +101,7 @@ class RobotController:
     # scale from -3 to positive 3, 0 = not moving
     moveScale = 0
     # index, actual speed
-    speedTable = {3 : 3400, 2 : 3750, 1 : 4000, 0 : 6000, -1 : 8000, -2 : 8250, -3 : 8500 }
-    turn_neutral = 6000
-    turn_clock = 7200
-    turn_counter_clock = 4500
+    speedTable = {3 : 5000, 2 : 5300, 1 : 5500, 0 : 6000, -1 : 6500, -2 : 6700, -3 : 7000 }
     speed_inc = 100
 
     def setSpeed(self,newSpeed):
@@ -124,8 +127,8 @@ class RobotController:
             self.setSpeed(self.moveScale - 1)
 
     def stop_moving(self):
-        print("I'm a gunna stop moving")
-        print("moveScale is: ", self.moveScale)
+        #print("I'm a gunna stop moving")
+        #print("moveScale is: ", self.moveScale)
         newSpeed = self.moveScale
         while(self.moveScale != 0):
             if self.moveScale > 0:
@@ -136,6 +139,10 @@ class RobotController:
 
     # might need mutex for this?
     isTurning = False
+    turn_neutral = 6000
+    turn_clock = 7500
+    turn_counter_clock = 4500
+
 
     def turn_clockwise(self):
         # make sure that we are not moving:
@@ -143,14 +150,28 @@ class RobotController:
         if self.moveScale == 0 and not self.isTurning:
             self.isTurning = True
             #TODO A THING
-            print("Turning Clockwise")
+            # set turn "right" first:
+            self.controller.setAccel(1,0)
+            self.controller.setTarget(2,self.turn_clock)
+            self.controller.setTarget(1, self.speedTable[2])
+            time.sleep(.5)
+            self.controller.setTarget(2,self.turn_neutral)
+            self.controller.setTarget(1, self.speedTable[0])
+            self.controller.setAccel(1,1)
+         #   print("Turning Clockwise")
             self.isTurning = False
 
-    def turn_coutnerClockWise(self):
+    def turn_coutnerClockWise(self):    
         self.stop_moving()
         if self.moveScale == 0 and not self.isTurning:
             self.isTurning = True
-            #TODO A THING
-            print("Turning Counter Clockwise")
+            self.controller.setAccel(1,0)
+            self.controller.setTarget(2,self.turn_counter_clock)
+            self.controller.setTarget(1, self.speedTable[1])
+            time.sleep(.5)
+            
+            self.controller.setTarget(2,self.turn_neutral)
+            self.controller.setTarget(1, self.speedTable[0])
+            self.controller.setAccel(1,1)
+         #   print("Turning Counter Clockwise")
             self.isTurning = False
-
