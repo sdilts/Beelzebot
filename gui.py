@@ -76,11 +76,11 @@ frame.bind("<KeyPress-i>", on_key_press_repeat)
 frame.bind("<KeyRelease-k>", lambda x: on_key_release_repeat(x, robot.ramp_backward))
 frame.bind("<KeyPress-k>", on_key_press_repeat)
 
-frame.bind("<KeyRelease-j>", lambda x: on_key_release_repeat(x, robot.turn_coutnerClockWise))
-frame.bind("<KeyPress-j>", on_key_press_repeat)
-
-frame.bind("<KeyRelease-l>", lambda x: on_key_release_repeat(x, robot.turn_clockwise))
+frame.bind("<KeyRelease-l>", lambda x: on_key_release_repeat(x, robot.turn_coutnerClockWise))
 frame.bind("<KeyPress-l>", on_key_press_repeat)
+
+frame.bind("<KeyRelease-j>", lambda x: on_key_release_repeat(x, robot.turn_clockwise))
+frame.bind("<KeyPress-j>", on_key_press_repeat)
 
 frame.bind("<KeyRelease-space>", lambda x: on_key_release_repeat(x, robot.stop_moving))
 frame.bind("<KeyPress-space>", on_key_press_repeat)
