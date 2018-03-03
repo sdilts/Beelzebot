@@ -1,0 +1,85 @@
+import Maestro as ma
+
+class RobotController:
+    head_v_increment = 1
+    head_h_increment = 1
+    waist_increment = 1
+
+    servo_left_bound = 3000
+    servo_right_bound = 9000
+
+    head_v_channel = 4 
+    head_h_channel = 3
+    waist_channel = 0
+    turn_channel = 2
+    move_channel = 1
+
+    waist_increment = int((servo_right_bound - servo_left_bound) / 3)
+    head_v_increment = int((servo_right_bound - servo_left_bound) / 5)
+    head_h_increment = int((servo_right_bound - servo_left_bound) / 5)
+
+    # controller = ma.Controller()
+
+    head_v_pos = 6000
+    head_h_pos = 6000
+    waist_pos = 6000
+
+    def __init__(self):
+        self.controller = ma.Controller(self.controller.setAccel(move_channel, 0)
+
+
+    def stop(self):
+        self.controller.setTarget(self.move_channel, 0)
+
+    def forward(self):
+        self.controller.setSpeed(self.move_channel, 1)
+        self.controller.setTarget(self.move_channel, 7000)
+        for i in range(10):
+            self.controller.setSpeed(self.move_channel, 2)
+
+    def correct_servo_bounds(self, number):
+        if(number > self.servo_right_bound):
+            return self.servo_right_bound
+        elif(number < self.servo_left_bound):
+            return self.servo_left_bound
+        else:
+            return number
+
+    def reset_pos(self):
+        self.head_v_pos = 6000
+        self.head_h_pos = 6000
+        self.waist_pos = 6000
+        #set initial values
+        self.controller.setTarget(self.head_v_channel, self.head_v_pos)
+        self.controller.setTarget(self.head_h_channel, self.head_h_pos)
+        self.controller.setTarget(self.waist_channel, self.waist_pos)
+        pass
+
+    def move_head_up(self):
+        self.head_v_pos = self.move_servo(self.head_v_pos, self.head_v_increment, self.head_v_channel)
+        pass
+
+    def move_head_down(self):
+        self.head_v_pos = self.move_servo(self.head_v_pos, -self.head_v_increment, self.head_v_channel)
+        pass
+
+    def move_head_left(self):
+        self.head_h_pos = self.move_servo(self.head_h_pos, self.head_h_increment, self.head_h_channel)
+        pass
+
+    def move_head_right(self):
+        self.head_h_pos = self.move_servo(self.head_h_pos, -self.head_h_increment, self.head_h_channel)
+        pass
+
+    def move_waist_left(self):
+        self.waist_pos = self.move_servo(self.waist_pos, self.waist_increment, self.waist_channel)
+
+    def move_waist_right(self):
+        self.waist_pos = self.move_servo(self.waist_pos, -self.waist_increment, self.waist_channel)
+
+
+    def move_servo(self,oldPos, change, channel):
+        newPos = oldPos + change
+        newPos = self.correct_servo_bounds(newPos)
+        self.controller.setTarget(channel, newPos)
+        return newPos

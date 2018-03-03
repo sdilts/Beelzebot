@@ -56,7 +56,7 @@ class RoboWindow(Frame):
 
     def init_gui(self):
         default_font = font.nametofont("TkDefaultFont")
-        default_font.configure(size=24)
+        default_font.configure(size=12)
         self.master.option_add('*Font', default_font)
         self.master.title("Robot!")
         self.pack(fill=BOTH, expand=1)
@@ -91,10 +91,10 @@ class RoboWindow(Frame):
 
 
         self.look_up.grid(row=0, column=1)
-        self.look_down.grid(row=2, column=1)
+        self.look_down.grid(row=1, column=1)
         self.look_left.grid(row=1, column=0)
         self.look_right.grid(row=1, column=3)
-
+        #self.look_frame.pack(padx=10)
 
         self.move_frame = Frame(self.control_frame)
         self.move_forward  = Button(self.move_frame, text="forward",
@@ -112,7 +112,7 @@ class RoboWindow(Frame):
 
 
         self.move_forward.grid(row=0, column=1)
-        self.move_backward.grid(row=2, column=1)
+        self.move_backward.grid(row=1, column=1)
         self.turn_left.grid(row=1, column=0)
         self.turn_right.grid(row=1, column=3)
 
@@ -125,17 +125,18 @@ class RoboWindow(Frame):
                                   image=self.img_wait,
                                   command = lambda: self.command_btn_pressed(WaitSettings(wait, 1, self.img_wait)))
         self.wait_button.grid(row=0, column=3)
+        #self.wait_button.pack(padx = 10)
 
-        self.control_frame.pack(pady=10)
+        self.control_frame.pack(pady=5)
 
         # stuff for the programming frame:
         self.programming_frame = Frame(self,height=200)
         self.programming_label = Label(self.programming_frame, text="Commands:", image=self.img_command)
         self.programming_label.grid(row=0)
-        self.command_q_frame = Frame(self.programming_frame, height=75,width=600)
+        self.command_q_frame = Frame(self.programming_frame, height=75,width=400)
         self.command_q_frame.grid(row=1)
 
-        self.programming_frame.pack(pady=20)
+        self.programming_frame.pack(pady=5)
 
 
         self.settings_frame = Frame(self)
@@ -146,14 +147,14 @@ class RoboWindow(Frame):
         self.entry_label = Label(self.settings_frame, text="Command Options")
         self.entry_label.grid(row=0, column=1)
 
-        self.entry_frame = Frame(self.settings_frame, width=600, height=100)
+        self.entry_frame = Frame(self.settings_frame, width=400, height=100)
         self.entry_frame.pack_propagate(False)
         self.entry_frame.grid(row=1, column=1)
 
         self.go_button = Button(self.settings_frame, text="Play!", image=self.img_play, command=self.play)
         self.go_button.grid(row=1, column=2)
 
-        self.settings_frame.pack(pady=10)
+        self.settings_frame.pack(pady=5)
 
 
     def play(self):
