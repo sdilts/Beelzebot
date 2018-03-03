@@ -3,6 +3,7 @@ import tkinter as tk
 class CommandSettings:
     def __init__(self, img):
         self.img = img
+        self.frame_width = 100
 
 class WaitSettings(CommandSettings):
 
@@ -15,10 +16,10 @@ class WaitSettings(CommandSettings):
 
     def draw_settings(self, parent_frame):
         if (self.opt_frame == None):
-            self.opt_frame = tk.Frame(parent_frame)
+            self.opt_frame = tk.Frame(parent_frame, width=self.frame_width)
 
-            waitLabel = tk.Label(self.opt_frame, text="Wait Time:")
-            waitEntry = tk.Spinbox(self.opt_frame, from_=1, to=self.maxWait)
+            waitLabel = tk.Label(self.opt_frame, text="Wait Time:", width=10)
+            waitEntry = tk.Spinbox(self.opt_frame, from_=1, to=self.maxWait, width=10)
             waitLabel.grid(row=1,column=0)
             waitEntry.grid(row=1,column=1)
         return self.opt_frame
@@ -41,14 +42,16 @@ class MotorSettings(CommandSettings):
 
     def draw_settings(self, parent_frame):
         if (self.opt_frame == None):
-            self.opt_frame = tk.Frame(parent_frame)
+            self.opt_frame = tk.Frame(parent_frame, width=self.frame_width)
 
             speedLabel = tk.Label(self.opt_frame, text="Speed:")
-            speedEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxSpeed)
+            speedEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, width=10, to=self.maxSpeed)
             speedEntry.set(self.speed)
             speedLabel.grid(row=1,column=0)
             speedEntry.grid(row=1,column=1)
         return self.opt_frame
+
+
 
     def verify_new_settings(new_settings):
         pass
@@ -72,7 +75,7 @@ class ServoSettings(CommandSettings):
 
     def draw_settings(self, parent_frame):
         if (self.opt_frame == None):
-            self.opt_frame = tk.Frame(parent_frame)
+            self.opt_frame = tk.Frame(parent_frame,width=self.frame_width)
 
             repeatLabel = tk.Label(self.opt_frame, text="Repeats:")
             repeatEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxRepeats)
