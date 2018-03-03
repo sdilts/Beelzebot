@@ -114,6 +114,13 @@ class RobotController:
         self.moveScale = newSpeed
         print("moveScale is now: ", self.moveScale)
 
+    def move_forward(speed):
+        self.setSpeed(speed)
+
+    # speed is absolute
+    def move_backwards(speed):
+        self.setSpeed(-speed)
+
     def ramp_forward(self):
         if not self.moveScale == 3:
             self.setSpeed(self.moveScale + 1)
