@@ -18,6 +18,18 @@ class RoboWindow(Frame):
         self.controller = RobotController()
         self.load_images()
         self.init_gui()
+        pad = 3
+        self._geom='200x200+0+0'
+        master.geometry("{0}x{1}+0+0".format(
+            master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
+        master.bind('<Escape>',self.toggle_geom)
+
+    def toggle_geom(self,event):
+        geom=self.master.winfo_geometry()
+        print(geom,self._geom)
+        self.master.geometry(self._geom)
+        self._geom=geom
+
 
     def load_images(self):
         self.waist_img_left = ImageTk.PhotoImage(file="./robot images/waist_left.png")
