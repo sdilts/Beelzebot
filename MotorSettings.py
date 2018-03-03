@@ -26,7 +26,7 @@ class WaitSettings(CommandSettings):
             self.opt_frame = tk.Frame(parent_frame, width=self.frame_width)
 
             waitLabel = tk.Label(self.opt_frame, text="Wait Time:")
-            self.waitEntry = tk.Spinbox(self.opt_frame, from_=1, to=self.maxWait)
+            self.waitEntry = tk.Spinbox(self.opt_frame, from_=1, to=self.maxWait, width=20)
             waitLabel.grid(row=1,column=0)
             self.waitEntry.grid(row=1,column=1)
         return self.opt_frame
@@ -57,7 +57,7 @@ class MotorSettings(CommandSettings):
             self.opt_frame = tk.Frame(parent_frame, width=self.frame_width)
 
             speedLabel = tk.Label(self.opt_frame, text="Speed:")
-            self.speedEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxSpeed)
+            self.speedEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxSpeed, width=20)
             self.speedEntry.set(self.speed)
             speedLabel.grid(row=1,column=0)
             self.speedEntry.grid(row=1,column=1)
@@ -90,7 +90,7 @@ class ServoSettings(CommandSettings):
             self.opt_frame = tk.Frame(parent_frame,width=self.frame_width)
 
             repeatLabel = tk.Label(self.opt_frame, text="Repeats:")
-            self.repeatEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=1, to=self.maxRepeats)
+            self.repeatEntry = tk.Scale(self.opt_frame, orient=tk.HORIZONTAL, from_=0, to=self.maxRepeats, width=20)
             self.repeatEntry.set(self.repeats)
             repeatLabel.grid(row=1,column=0)
             self.repeatEntry.grid(row=1,column=1)
