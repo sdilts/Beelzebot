@@ -21,7 +21,7 @@ class RoboWindow(Frame):
         self.controller = RobotController()
         self.load_images()
         self.init_gui()
-        self.animation_obj = ra.DrawingStuff()
+        self.init_face()
         pad = 3
         self._geom='200x200+0+0'
         master.geometry("{0}x{1}+0+0".format(
@@ -33,6 +33,14 @@ class RoboWindow(Frame):
         print(geom,self._geom)
         self.master.geometry(self._geom)
         self._geom=geom
+
+    def init_face(self):
+        self.face_frame = ra.DrawingStuff(self)
+        try:
+            _thread.start_new_thread(self.face_frame.make_face,())
+        except:
+            print ("Error: unable to start thread")
+
 
 
     def load_images(self):
@@ -172,17 +180,18 @@ class RoboWindow(Frame):
             for cmd in commands:
                 print("Running: ", cmd)
                 # cmd()
-            # self.controller.stop_moving()
+            self.controller.stop_moving()
             time.sleep(5)
             callback_func()
 
         def restore_config():
-            dummy_frame.pack_forget()
+            self.face_frame.pack_forget()
+            self.face_frame.changeFlag()
             self.input_frame.pack()
 
         self.input_frame.pack_forget()
-        dummy_frame.pack()
-
+        self.face_frame.pack()
+        self.face_frame.changeFlag()
         thread = _thread.start_new_thread(run_commands,tuple([restore_config]))
 
         print("Thread: ", thread)
@@ -257,20 +266,8 @@ def showAndTellAdventures(paint):
     paint.hide()
 
 def main():
-
     root = Tk()
-    paint = DrawingStuff(root)
-    ######Start a new Thread
-    try:
-        _thread.start_new_thread(paint.make_face,())
-        #_thread.start_new_thread(showAndTellAdventures, (paint, ))
-    except:
-       print ("Error: unable to start thread")
-    try:
-        _thread.start_new_thread(showAndTellAdventures, (paint, ))
-    except:
-       print ("Error: unable to start thread")
-    #f = RoboWindow(root)
+    f = RoboWindow(root)
     root.mainloop()
 
 

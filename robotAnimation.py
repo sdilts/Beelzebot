@@ -2,9 +2,9 @@ import tkinter as tk
 import _thread
 import time
 
-class DrawingStuff():
+class DrawingStuff(tk.Frame):
     def __init__(self, r, c=None):
-
+        tk.Frame.__init__(self,r)
         self.screen_width = 640
         self.screen_height = 480
 
@@ -28,16 +28,15 @@ class DrawingStuff():
         self.step_x = 1
         self.step_y = 1
 
-        
+
         self.client = c
         self.root = r
-        self.flag = True
+        self.flag = False
         self.speed = .001
-        r.title("TangoBot")
         #self.canvasW = 800
         #self.canvasH = 410
-        self.canvas = tk.Canvas(self.root, width =self.screen_width, height=self.screen_height)
-        self.canvas.grid(row = 1, column = 0)
+        self.canvas = tk.Canvas(self, width =self.screen_width, height=self.screen_height)
+        self.canvas.pack()
 
     def eye(self, x, y, r, tag_name, color):
         # form a bounding square using center (x,y) and radius r
@@ -53,7 +52,7 @@ class DrawingStuff():
         #canvas.grid(row = 0, column = 0)
         i = 0
         j = 0
-        
+
         aflag = False
         bflag = False
         #head
@@ -68,50 +67,50 @@ class DrawingStuff():
 
         self.canvas.create_polygon(self.head_x+self.head_width+30,self.head_y-10, self.head_x+self.head_width+30, self.head_y-40,
                                   self.head_x+self.head_width+60,self.head_y-10,fill = 'orange')
-        while(self.flag):
+        while(True):
+            while(self.flag):
 
-            self.canvas.create_polygon(self.head_x, self.head_y+self.head_height, self.head_x+self.head_width, self.head_y+self.head_height,
-                                  self.head_x + (self.head_width/2), self.head_y+(self.head_height*2),fill = 'red')
+                self.canvas.create_polygon(self.head_x, self.head_y+self.head_height, self.head_x+self.head_width, self.head_y+self.head_height,
+                                      self.head_x + (self.head_width/2), self.head_y+(self.head_height*2),fill = 'red')
 
-            #eyes
-            self.eye(self.eye_x, self.eye_y, self.eye_r, "eye", "white")
-            self.eye(self.eye_x+self.distance, self.eye_y, self.eye_r, "eye", "white")
+                #eyes
+                self.eye(self.eye_x, self.eye_y, self.eye_r, "eye", "white")
+                self.eye(self.eye_x+self.distance, self.eye_y, self.eye_r, "eye", "white")
 
-            self.eye(self.eye_x+i, self.eye_y+j, self.pupil_r, "pupil", "black")
-            self.eye(self.eye_x+self.distance+i, self.eye_y+j, self.pupil_r, "pupil", "black")
+                self.eye(self.eye_x+i, self.eye_y+j, self.pupil_r, "pupil", "black")
+                self.eye(self.eye_x+self.distance+i, self.eye_y+j, self.pupil_r, "pupil", "black")
 
-            #mouth
-            self.canvas.create_polygon(self.mouth_x, self.mouth_y, self.mouth_x+self.mouth_width, self.mouth_y,
-                                  self.mouth_x+(self.mouth_width/2)-(i/2), self.mouth_y+(self.mouth_width/4)-(i/4), fill = 'black')
-            self.root.update()
-            time.sleep(self.speed)
+                #mouth
+                self.canvas.create_polygon(self.mouth_x, self.mouth_y, self.mouth_x+self.mouth_width, self.mouth_y,
+                                      self.mouth_x+(self.mouth_width/2)-(i/2), self.mouth_y+(self.mouth_width/4)-(i/4), fill = 'black')
+                self.root.update()
+                time.sleep(self.speed)
 
-##            self.eye(self.eye_x, self.eye_y, self.pupil_r, "pupil", "black")
-##            self.eye(self.eye_x+self.distance, self.eye_y, self.pupil_r, "pupil", "black")
-##            self.root.update()
-##            time.sleep(self.speed)
-            if i == 70:
-                aflag = True
-            elif i == -70:
-                aflag = False
-            if aflag:
-                i -=10
-            else:
-                i +=10
-
-
-            
+    ##            self.eye(self.eye_x, self.eye_y, self.pupil_r, "pupil", "black")
+    ##            self.eye(self.eye_x+self.distance, self.eye_y, self.pupil_r, "pupil", "black")
+    ##            self.root.update()
+    ##            time.sleep(self.speed)
+                if i == 70:
+                    aflag = True
+                elif i == -70:
+                    aflag = False
+                if aflag:
+                    i -=10
+                else:
+                    i +=10
 
 
-        
+
+
+
+
     def changeFlag(self):
-        for i in range(100):
-            print (i)
-        #if self.flag == True:        
-        #    self.flag = False
-        #else:
-        #    self.flag = True
-   
+
+        if self.flag == True:
+            self.flag = False
+        else:
+            self.flag = True
+
     def show(self):
         self.canvas.grid()
         print("Showing!")
@@ -119,7 +118,7 @@ class DrawingStuff():
     def hide(self):
         self.canvas.grid_forget()
         print("Hiding...")
-        
+
     def drawEyes(self):
         midRow = int(self.canvasH/2)
         midCol = int(self.canvasW/2)
@@ -138,22 +137,4 @@ class DrawingStuff():
             self.c.create_oval(midCol+5, 5, self.canvasW, self.canvasH-40, fill="#000000")
             self.c.create_oval(leftRow, leftCol, leftRow-100, leftCol+100, fill="#ffffff")
             self.c.create_oval(500, 220, 600, 320, fill="#ffffff")
-            self.root.update()     
-  
-def __main__():
-
-    root = tk.Tk()
-    paint = DrawingStuff(root)
-    ######Start a new Thread
-    try:
-        _thread.start_new_thread(paint.changeFlag,())
-    except:
-       print ("Error: unable to start thread")
-    paint.make_face()
-
-    ####Continue with new Thread   
-
-    print("Goodbye")
-    root.mainloop()
-  
-__main__()
+            self.root.update()
