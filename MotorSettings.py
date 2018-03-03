@@ -67,7 +67,7 @@ class ServoSettings(CommandSettings):
 
     # repeats are the number of times the command is exectued.
     # for example, the command is always something like "Move one posistion to the right"
-    def __init__(self, function_to_call, repeats, img, maxRepeats=5):
+    def __init__(self, function_to_call, repeats, img, maxRepeats=4):
         CommandSettings.__init__(self,img)
         self.function_to_call = function_to_call
         self.repeats = repeats
