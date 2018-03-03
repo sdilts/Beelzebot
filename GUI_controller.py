@@ -133,7 +133,8 @@ class RoboWindow(Frame):
         self.entry_label = Label(self.settings_frame, text="Command Options")
         self.entry_label.grid(row=0, column=1)
 
-        self.entry_frame = Frame(self.settings_frame, width=500, height=100)
+        self.entry_frame = Frame(self.settings_frame, width=600, height=100)
+        self.entry_frame.pack_propagate(False)
         self.entry_frame.grid(row=1, column=1)
 
         self.go_button = Button(self.settings_frame, text="Play!", image=self.img_play, command=self.play)
