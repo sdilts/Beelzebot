@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter.font import Font
 
 class CommandSettings:
     def __init__(self, img):
@@ -26,7 +27,7 @@ class WaitSettings(CommandSettings):
             self.opt_frame = tk.Frame(parent_frame, width=self.frame_width)
 
             waitLabel = tk.Label(self.opt_frame, text="Wait Time:")
-            self.waitEntry = tk.Spinbox(self.opt_frame, from_=1, to=self.maxWait, width=20)
+            self.waitEntry = tk.Spinbox(self.opt_frame, from_=1, to=self.maxWait, width=3, font = Font(family = 'Helvetica', size = 36))
             waitLabel.grid(row=1,column=0)
             self.waitEntry.grid(row=1,column=1)
         return self.opt_frame
