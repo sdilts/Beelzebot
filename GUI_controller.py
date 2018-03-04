@@ -1,7 +1,7 @@
 import time
 import threading
 import _thread
-#import robotAnimation as ra
+import robotAnimation as ra
 from tkinter import *
 from tkinter import font
 from bodyControl import *
@@ -56,10 +56,10 @@ class RoboWindow(Frame):
         self.img_look_down = ImageTk.PhotoImage(file="./robot images/look_down.png")
         self.img_look_left = ImageTk.PhotoImage(file="./robot images/look_right.png")
         self.img_look_right = ImageTk.PhotoImage(file="./robot images/look_left.png")
-        self.img_move_forward = ImageTk.PhotoImage(file="./robot images/up.png")
-        self.img_move_backward = ImageTk.PhotoImage(file="./robot images/down.png")
-        self.img_turn_right = ImageTk.PhotoImage(file="./robot images/right.png")
-        self.img_turn_left = ImageTk.PhotoImage(file="./robot images/left.png")
+        self.img_move_backward = ImageTk.PhotoImage(file="./robot images/up.png")
+        self.img_move_forward = ImageTk.PhotoImage(file="./robot images/down.png")
+        self.img_turn_left = ImageTk.PhotoImage(file="./robot images/right.png")
+        self.img_turn_right = ImageTk.PhotoImage(file="./robot images/left.png")
         self.img_wait = ImageTk.PhotoImage(file="./robot images/wait_large.png")
         self.img_stop = ImageTk.PhotoImage(file = "./robot images/wait.png")	
 
@@ -118,19 +118,19 @@ class RoboWindow(Frame):
                                     command = lambda: self.command_btn_pressed(MotorSettings(self.controller.setSpeed, 1, self.img_move_forward )))
         self.move_backward = Button(self.move_frame, text="backward",
                                     image=self.img_move_backward,
-                                    command = lambda: self.command_btn_pressed(MotorSettings(self.controller.setSpeed, 1, self.img_move_backward )))
+                                    command = lambda: self.command_btn_pressed(MotorSettings(self.controller.move_backwards, 1, self.img_move_backward )))
         self.turn_left     = Button(self.move_frame, text="turn left",
                                     image=self.img_turn_left,
-                                    command = lambda: self.command_btn_pressed(MotorSettings(self.controller.setSpeed, 1, self.img_turn_left, maxSpeed=1)))
+                                    command = lambda: self.command_btn_pressed(StopSettings(self.controller.turn_clockwise, 1, self.img_turn_left)))
         self.turn_right    = Button(self.move_frame, text="turn right",
                                     image=self.img_turn_right,
-                                    command = lambda: self.command_btn_pressed(MotorSettings(self.controller.setSpeed, 1, self.img_turn_right, maxSpeed=1 )))
+                                    command = lambda: self.command_btn_pressed(StopSettings(self.controller.turn_counterClockWise, 1, self.img_turn_right)))
 
 
-        self.move_forward.grid(row=0, column=1)
-        self.move_backward.grid(row=1, column=1)
-        self.turn_left.grid(row=1, column=0)
-        self.turn_right.grid(row=1, column=3)
+        self.move_backward.grid(row=0, column=1)
+        self.move_forward.grid(row=1, column=1)
+        self.turn_right.grid(row=1, column=0)
+        self.turn_left.grid(row=1, column=3)
 
 
         self.waist_frame.grid(row=0, column=0)
@@ -141,7 +141,7 @@ class RoboWindow(Frame):
                                   image=self.img_wait,
                                   command = lambda: self.command_btn_pressed(WaitSettings(wait, 1, self.img_wait)))
         self.wait_button.grid(row=0, column=3)
-        self.stop_button = Button(self.control_frame, text = "Stop!", command = lambda:self.command_btn_pressed(WaitSettings(self.controller.stop_moving, 1, self.img_stop)))
+        self.stop_button = Button(self.control_frame, text = "Stop!", command = lambda:self.command_btn_pressed(StopSettings(self.controller.stop_moving, 1, self.img_stop)))
         #self.wait_button.pack(padx = 10)
         self.stop_button.grid(row = 1, column = 3)
         self.control_frame.pack(pady=5)

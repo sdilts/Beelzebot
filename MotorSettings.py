@@ -34,6 +34,26 @@ class WaitSettings(CommandSettings):
             self.waitEntry.grid(row=1,column=1)
         return self.opt_frame
 
+class StopSettings(CommandSettings):
+
+    def __init__(self, function_to_call, wait_time, img, maxWait=100):
+        CommandSettings.__init__(self, img)
+        self.function_to_call = function_to_call
+        self.opt_frame = None
+        self.wait_time = wait_time
+        self.maxWait=100
+
+    def gen_command(self):
+        print("Command: ", self.function_to_call, "stop or turn")
+        return lambda: self.function_to_call()
+
+    def draw_settings(self, parent_frame):
+        if (self.opt_frame == None):
+            self.opt_frame = tk.Frame(parent_frame, width=self.frame_width)
+        return self.opt_frame
+
+
+
 
 class MotorSettings(CommandSettings):
 

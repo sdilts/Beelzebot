@@ -117,11 +117,11 @@ class RobotController:
         self.moveScale = newSpeed
         print("moveScale is now: ", self.moveScale)
 
-    def move_forward(speed):
+    def move_forward(self, speed):
         self.setSpeed(speed)
 
     # speed is absolute
-    def move_backwards(speed):
+    def move_backwards(self, speed):
         self.setSpeed(-speed)
 
     def ramp_forward(self):
@@ -168,7 +168,7 @@ class RobotController:
          #   print("Turning Clockwise")
             self.isTurning = False
 
-    def turn_coutnerClockWise(self):    
+    def turn_counterClockWise(self):    
         self.stop_moving()
         if self.moveScale == 0 and not self.isTurning:
             self.isTurning = True
