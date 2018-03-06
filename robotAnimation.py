@@ -68,9 +68,13 @@ class DrawingStuff(tk.Frame):
         self.canvas.create_polygon(self.head_x+self.head_width+30,self.head_y-10, self.head_x+self.head_width+30, self.head_y-40,
                                   self.head_x+self.head_width+60,self.head_y-10,fill = 'orange')
 
+        self.canvas.create_polygon(self.head_x, self.head_y+self.head_height, self.head_x+self.head_width, self.head_y+self.head_height,
+                                  self.head_x + (self.head_width/2), self.head_y+(self.head_height*2),fill = 'red')
+
         while(self.flag):
 
-            self.canvas.create_polygon(self.head_x, self.head_y+self.head_height, self.head_x+self.head_width, self.head_y+self.head_height,
+            self.canvas.create_polygon(((2*self.head_x)+(self.head_width/2)/2, ((self.head_y*2)+(3*self.head_height))/2, ((2*self.head_x)+self.head_width*(3/2))/2,
+                                  ((self.head_y*2)+(3*self.head_height))/2
                                   self.head_x + (self.head_width/2), self.head_y+(self.head_height*2),fill = 'red')
 
             #eyes
@@ -138,3 +142,4 @@ class DrawingStuff(tk.Frame):
             self.c.create_oval(leftRow, leftCol, leftRow-100, leftCol+100, fill="#ffffff")
             self.c.create_oval(500, 220, 600, 320, fill="#ffffff")
             self.root.update()
+
