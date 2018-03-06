@@ -61,7 +61,7 @@ class RoboWindow(Frame):
         self.img_turn_left = ImageTk.PhotoImage(file="./robot images/right.png")
         self.img_turn_right = ImageTk.PhotoImage(file="./robot images/left.png")
         self.img_wait = ImageTk.PhotoImage(file="./robot images/wait_large.png")
-        self.img_stop = ImageTk.PhotoImage(file = "./robot images/wait.png")	
+        self.img_stop = ImageTk.PhotoImage(file = "./robot images/stop.png")	
 
         self.img_trash = ImageTk.PhotoImage(file="./robot images/trash.png")
         self.img_play  = ImageTk.PhotoImage(file="./robot images/play.png")
@@ -141,7 +141,7 @@ class RoboWindow(Frame):
                                   image=self.img_wait,
                                   command = lambda: self.command_btn_pressed(WaitSettings(wait, 1, self.img_wait)))
         self.wait_button.grid(row=0, column=3)
-        self.stop_button = Button(self.control_frame, text = "Stop!", command = lambda:self.command_btn_pressed(StopSettings(self.controller.stop_moving, 1, self.img_stop)))
+        self.stop_button = Button(self.control_frame, text = "Stop!", image=self.img_stop, command = lambda:self.command_btn_pressed(StopSettings(self.controller.stop_moving, 1, self.img_stop)))
         #self.wait_button.pack(padx = 10)
         self.stop_button.grid(row = 1, column = 3)
         self.control_frame.pack(pady=5)
