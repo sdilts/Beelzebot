@@ -36,7 +36,6 @@ class RoboWindow(Frame):
         self._geom=geom
 
     def start_face(self):
-        self.face_frame
         self.face_frame.pack()
         self.face_frame.changeFlag()
         thread = threading.Thread(target=self.face_frame.make_face)
@@ -176,7 +175,6 @@ class RoboWindow(Frame):
 
     def play(self):
         commands = self.command_seq_gen()
-        dummy_frame = Frame(self, bg="black", width=100, height=100)
 
         def run_commands(callback_func):
             print("\n\nCommands:")
