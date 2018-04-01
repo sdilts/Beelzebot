@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter.font import Font
 
+
 class CommandSettings:
     def __init__(self, img):
         self.img = img
@@ -8,6 +9,41 @@ class CommandSettings:
 
     def gen_command(self):
         pass
+
+
+def foo(phrase):
+    print(phrase)
+
+class TalkSettings(CommandSettings):
+    def __init__(self, img, root):
+        CommandSettings.__init__(self, img)
+        self.function_to_call = foo
+        self.opt_frame = None
+        self.root = root
+        self.tkvar = None
+
+    def gen_command(self):
+        print("Command: ", self.function_to_call)
+        return lambda: self.function_to_call(self.tkvar.get())
+
+    def draw_settings(self, parent_frame):
+        if(self.opt_frame == None):
+            self.opt_frame = tk.Frame(parent_frame, width = self.frame_width)
+            talkLabel = tk.Label(self.opt_frame, text="Say:")
+            options = [
+                "It's a cold day in hell", 
+                "Go to Heaven for the climate, Hell for the company",
+                "Maybe this world is another planet's Hell",
+                "If you live long enough, something will kill you",
+                "Death and taxes are inevitable",
+                "Would you like to strike a deal?"
+                ]
+            self.tkvar = tk.StringVar(self.root)
+            self.tkvar.set(options[5])
+            self.popupMenu = tk.OptionMenu(self.opt_frame, self.tkvar, *options)
+            talkLabel.grid(row=1, column=0)
+            self.popupMenu.grid(row=2, column = 0)
+        return self.opt_frame
 
 class WaitSettings(CommandSettings):
 

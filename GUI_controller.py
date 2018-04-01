@@ -23,7 +23,7 @@ class RoboWindow(Frame):
         self.load_images()
         self.init_gui()
         self.face_frame = ra.DrawingStuff(self)
-        pad = 3
+        pad = 2
         self._geom='200x200+0+0'
         master.geometry("{0}x{1}+0+0".format(
             master.winfo_screenwidth()-pad, master.winfo_screenheight()-pad))
@@ -50,7 +50,7 @@ class RoboWindow(Frame):
 
         self.img_waist_left_small  = ImageTk.PhotoImage(file="./robot images/waist_right_small.png")
         self.img_waist_right_small = ImageTk.PhotoImage(file="./robot images/waist_left_small.png")
-
+        self.img_talk = ImageTk.PhotoImage(file = "./robot images/talk.png")
         self.img_look_up = ImageTk.PhotoImage(file="./robot images/look_up.png")
         self.img_look_down = ImageTk.PhotoImage(file="./robot images/look_down.png")
         self.img_look_left = ImageTk.PhotoImage(file="./robot images/look_right.png")
@@ -142,9 +142,13 @@ class RoboWindow(Frame):
         self.wait_button.grid(row=0, column=3)
         self.stop_button = Button(self.control_frame, text = "Stop!", image=self.img_stop, command = lambda:self.command_btn_pressed(StopSettings(self.controller.stop_moving, 1, self.img_stop)))
         #self.wait_button.pack(padx = 10)
-        self.stop_button.grid(row = 1, column = 3)
-        self.control_frame.pack(pady=5)
+        self.stop_button.grid(row = 0, column = 4)
+        self.control_frame.pack(pady=3)
 
+        #Talk Settings
+        self.talk_button = Button(self.control_frame, text = "Talk!", image=self.img_talk,
+                                   command = lambda: self.command_btn_pressed(TalkSettings(self.img_talk, self.master)))
+        self.talk_button.grid(row=1, column = 3)
         # stuff for the programming frame:
         self.programming_frame = Frame(self.input_frame,height=200)
         self.programming_label = Label(self.programming_frame, text="Commands:", image=self.img_command)
