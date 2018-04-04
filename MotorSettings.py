@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter.font import Font
-
+from client import *
+from server import *
 
 class CommandSettings:
     def __init__(self, img):
@@ -11,20 +12,42 @@ class CommandSettings:
         pass
 
 
-def foo(phrase):
-    print(phrase)
+class WaitTalkSettings(CommandSettings):
+    def __init__(self):
+        self.function_to_call = wait_for_command
+        self.opt_frame = None
 
+    def gen_command(self):
+        print("Command: " + self.function_to_call)
+        return lambda: self.function_to_call()
+ 
+    def draw_settings(self, parent_frame):
+        if(self.opt_frame == None):
+            self.opt_frame = tk.Frame(parent_frame, width = self.frame_width)
+            talkLabel1 = tk.Label(self.opt_frame, text="Say a command like...")
+            talkLabel2 = tk.Label(self.opt_frame, text="Dance!")
+            talkLabel3 = tk.Label(self.opt_frame, text="Go Home!")
+            talkLabel4 = tk.Label(self.opt_frame, text="Play it cool!")
+            talkLabel1.grid(row=1, column=0)
+            talkLabel2.grid(row=1, column=1)
+            talkLabel3.grid(row=1, column=2)
+            talkLabel4.grid(row=1, column=3)
+        return self.opt_frame
+
+         
 class TalkSettings(CommandSettings):
-    def __init__(self, img, root):
+    def __init__(self, img, root, hostIP, port):
         CommandSettings.__init__(self, img)
-        self.function_to_call = foo
+        self.function_to_call = say_phrase
+        self.hostIP = hostIP
+        self.port = port
         self.opt_frame = None
         self.root = root
         self.tkvar = None
 
     def gen_command(self):
         print("Command: ", self.function_to_call)
-        return lambda: self.function_to_call(self.tkvar.get())
+        return lambda: self.function_to_call(self.hostIP, self.port, self.tkvar.get())
 
     def draw_settings(self, parent_frame):
         if(self.opt_frame == None):

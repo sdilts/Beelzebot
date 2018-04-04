@@ -7,6 +7,7 @@ from tkinter import font
 from bodyControl import *
 from PIL import ImageTk
 from MotorSettings import *
+from client import *
 
 def wait(sleep_time):
     time.sleep(sleep_time)
@@ -16,9 +17,11 @@ class RoboWindow(Frame):
     command_list = []
     cur_selected_indx = 0
 
-    def __init__(self, master=None):
+    def __init__(self, androidIP, androidPort, master=None):
         Frame.__init__(self, master, width=500)
         self.master = master
+        self.androidIP = androidIP
+        self.androidPort = androidPort
         self.controller = RobotController()
         self.load_images()
         self.init_gui()
@@ -145,11 +148,16 @@ class RoboWindow(Frame):
         self.stop_button.grid(row = 0, column = 4)
         self.control_frame.pack(pady=3)
 
-        #Talk Settings
+        #######Talk Settings
+
         self.talk_button = Button(self.control_frame, text = "Talk!", image=self.img_talk,
-                                   command = lambda: self.command_btn_pressed(TalkSettings(self.img_talk, self.master)))
+                                   command = lambda: self.command_btn_pressed(TalkSettings(self.img_talk, self.master, self.androidIP, self.androidPort)))
         self.talk_button.grid(row=1, column = 3)
-        # stuff for the programming frame:
+        
+        self.wait_for_talk_button = Button(self.control_frame, text = "wait for words", 
+                                   command = lambda: self.command_btn_pressed(WaitTalkSettings(self.img_talk)))
+        self.wait_for_talk_button.grid(row = 1, column = 4)
+	# stuff for the programming frame:
         self.programming_frame = Frame(self.input_frame,height=200)
         self.programming_label = Label(self.programming_frame, text="Commands:", image=self.img_command)
         self.programming_label.grid(row=0)
@@ -272,7 +280,9 @@ def showAndTellAdventures(paint):
 
 def main():
     root = Tk()
-    f = RoboWindow(root)
+    ip = input("anroid ip: ")
+    port = input("port: ") 
+    f = RoboWindow(ip, port, root)
     root.mainloop()
 
 
