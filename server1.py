@@ -24,11 +24,15 @@ def do_the_thing(command, ip, port,roboControl, isStart=False):
     if command == 'do your thing':
         pass
     elif command == 'dance':
-       
-        roboControl.turn_clockwise()
-        time.sleep(2)
-        roboControl.turn_counterClockWise()
-        time.sleep(2)
+        for i in range(5):
+            roboControl.move_head_up()
+            time.sleep(.5)
+            roboControl.move_head_down()
+            time.sleep(.5)
+        for i in range(2):
+            roboControl.turn_clockwise()
+            roboControl.turn_counterClockWise()
+      
         print('done dancing!')
         
     elif command == 'start' and isStart:
