@@ -285,6 +285,8 @@ def main():
     port = input("port: ") 
     f = RoboWindow(ip, port, root)
     root.mainloop()
+    if wait_for_command.server:
+        wait_for_command.server.stop()
 
 
 main()
