@@ -188,7 +188,7 @@ class RoboWindow(Frame):
 
     def play(self):
         commands = self.command_seq_gen()
-        #wait_for_command(self.androidIP, self.androidPort,self.controller, True)
+        wait_for_command(self.androidIP, self.androidPort,self.controller, True)
         def run_commands(callback_func):
             print("\n\nCommands:")
             self.controller.reset_pos()
