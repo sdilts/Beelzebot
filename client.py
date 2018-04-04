@@ -1,21 +1,24 @@
 import socket
 
-def say_phrase(hostIP, port, data):
-    client = Client(hostIP, port, data)
+def say_phrase(hostIP, port, data, waitForTalking = False):
+    client = Client(hostIP, port, data, waitForTalking)
     client.start()
     client.close()
 
 ################################    SENDS THINGS
 class Client:
 
-    def __init__(self, hostIP, port, data):
+    def __init__(self, hostIP, port, data, isWait):
         self.host = hostIP
         self.port = int(port)
         self.mySocket = socket.socket()
         print("Connecting!")
         self.mySocket.connect((self.host,self.port))
         #self.toSend = False
-        self.data = "s\t"
+        if isWait:
+            self.data = "l\t"
+        else:
+            self.data = "s\t"
         self.data = self.data + data
 
 

@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter.font import Font
 from client import *
-from server import *
+from server1 import *
 
 class CommandSettings:
     def __init__(self, img):
@@ -13,13 +13,16 @@ class CommandSettings:
 
 
 class WaitTalkSettings(CommandSettings):
-    def __init__(self):
+    def __init__(self, img, ip, port):
+        CommandSettings.__init__(self, img)
         self.function_to_call = wait_for_command
         self.opt_frame = None
+        self.ip = ip
+        self.port = port
 
     def gen_command(self):
-        print("Command: " + self.function_to_call)
-        return lambda: self.function_to_call()
+        print("Command: ", self.function_to_call)
+        return lambda: self.function_to_call(self.ip, self.port)
  
     def draw_settings(self, parent_frame):
         if(self.opt_frame == None):

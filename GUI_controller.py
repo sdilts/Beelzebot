@@ -8,6 +8,7 @@ from bodyControl import *
 from PIL import ImageTk
 from MotorSettings import *
 from client import *
+from server import *
 
 def wait(sleep_time):
     time.sleep(sleep_time)
@@ -155,7 +156,7 @@ class RoboWindow(Frame):
         self.talk_button.grid(row=1, column = 3)
         
         self.wait_for_talk_button = Button(self.control_frame, text = "wait for words", 
-                                   command = lambda: self.command_btn_pressed(WaitTalkSettings(self.img_talk)))
+                                   command = lambda: self.command_btn_pressed(WaitTalkSettings(self.img_talk, self.androidIP, self.androidPort)))
         self.wait_for_talk_button.grid(row = 1, column = 4)
 	# stuff for the programming frame:
         self.programming_frame = Frame(self.input_frame,height=200)
