@@ -65,7 +65,7 @@ class RoboWindow(Frame):
         self.img_turn_right = ImageTk.PhotoImage(file="./robot images/left.png")
         self.img_wait = ImageTk.PhotoImage(file="./robot images/wait_large.png")
         self.img_stop = ImageTk.PhotoImage(file = "./robot images/stop.png")	
-
+        self.img_wait_talk = ImageTk.PhotoImage(file = "./robot images/stop.png")
         self.img_trash = ImageTk.PhotoImage(file="./robot images/trash.png")
         self.img_play  = ImageTk.PhotoImage(file="./robot images/play.png")
 
@@ -155,8 +155,8 @@ class RoboWindow(Frame):
                                    command = lambda: self.command_btn_pressed(TalkSettings(self.img_talk, self.master, self.androidIP, self.androidPort)))
         self.talk_button.grid(row=1, column = 3)
         
-        self.wait_for_talk_button = Button(self.control_frame, text = "wait for words", 
-                                   command = lambda: self.command_btn_pressed(WaitTalkSettings(self.img_talk, self.androidIP, self.androidPort)))
+        self.wait_for_talk_button = Button(self.control_frame, text = "wait for words", image = self.img_wait_talk, 
+                                   command = lambda: self.command_btn_pressed(WaitTalkSettings(self.img_wait_talk, self.androidIP, self.androidPort, self.controller)))
         self.wait_for_talk_button.grid(row = 1, column = 4)
 	# stuff for the programming frame:
         self.programming_frame = Frame(self.input_frame,height=200)
@@ -188,7 +188,7 @@ class RoboWindow(Frame):
 
     def play(self):
         commands = self.command_seq_gen()
-
+        #wait_for_command(self.androidIP, self.androidPort,self.controller, True)
         def run_commands(callback_func):
             print("\n\nCommands:")
             self.controller.reset_pos()

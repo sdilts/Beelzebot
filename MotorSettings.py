@@ -13,16 +13,17 @@ class CommandSettings:
 
 
 class WaitTalkSettings(CommandSettings):
-    def __init__(self, img, ip, port):
+    def __init__(self, img, ip, port, roboControl):
         CommandSettings.__init__(self, img)
         self.function_to_call = wait_for_command
         self.opt_frame = None
         self.ip = ip
         self.port = port
+        self.robo = roboControl
 
     def gen_command(self):
         print("Command: ", self.function_to_call)
-        return lambda: self.function_to_call(self.ip, self.port)
+        return lambda: self.function_to_call(self.ip, self.port, self.robo)
  
     def draw_settings(self, parent_frame):
         if(self.opt_frame == None):
@@ -50,7 +51,7 @@ class TalkSettings(CommandSettings):
 
     def gen_command(self):
         print("Command: ", self.function_to_call)
-        return lambda: self.function_to_call(self.hostIP, self.port, self.tkvar.get())
+        return lambda: self.function_to_call(self.hostIP, self.port, self.tkvar.get(), False)
 
     def draw_settings(self, parent_frame):
         if(self.opt_frame == None):
