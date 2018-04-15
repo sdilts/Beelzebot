@@ -1,6 +1,7 @@
 import time
 import threading
 import _thread
+import PIL
 import robotAnimation as ra
 from tkinter import *
 from tkinter import font
@@ -64,8 +65,9 @@ class RoboWindow(Frame):
         self.img_turn_left = ImageTk.PhotoImage(file="./robot images/right.png")
         self.img_turn_right = ImageTk.PhotoImage(file="./robot images/left.png")
         self.img_wait = ImageTk.PhotoImage(file="./robot images/wait_large.png")
-        self.img_stop = ImageTk.PhotoImage(file = "./robot images/stop.png")	
-        self.img_wait_talk = ImageTk.PhotoImage(file = "./robot images/stop.png")
+        self.img_stop = ImageTk.PhotoImage(file = "./robot images/stop.png")
+        image = PIL.Image.open("./robot images/listen.png").resize((48,48),PIL.Image.ANTIALIAS)
+        self.img_wait_talk = ImageTk.PhotoImage(image)
         self.img_trash = ImageTk.PhotoImage(file="./robot images/trash.png")
         self.img_play  = ImageTk.PhotoImage(file="./robot images/play.png")
 
@@ -285,6 +287,8 @@ def main():
     port = input("port: ") 
     f = RoboWindow(ip, port, root)
     root.mainloop()
+    if wait_for_command.server:
+        wait_for_command.server.stop()
 
 
 main()

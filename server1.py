@@ -25,8 +25,7 @@ def wait_for_command(ip, port,roboControl, isStart=False):
             command = wait_for_command.server.recieved.get()
 
     print("wait_for_command just ran: ", command)
-    # do_the_thing(command, ip, port,roboControl, isStart)
-    return command
+    do_the_thing(command, ip, port,roboControl, isStart)
 
 wait_for_command.server = None
 
@@ -57,11 +56,8 @@ def do_the_thing(command, ip, port,roboControl, isStart=False):
 
 class Server:
 
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
-    def __init__(self,ip, port, isStart):
+    def __init__(self,ip, port):
+        self.recieved = Queue()
         self.host = '127.0.0.1'
         self.port = 5012
 
@@ -88,36 +84,12 @@ class Server:
         self.mySocket = socket.socket()
         self.mySocket.bind(('',self.port))
         self.mySocket.listen(1)
-<<<<<<< Updated upstream
         while not self.stopEvent.wait(1):
             conn, addr = self.mySocket.accept()
             print("Connection from: " + str(addr))
             if not conn or not addr:
                 print("your connection isn't working")
             self.commandLoop(conn)
-
-=======
-        self.conn, self.addr = self.mySocket.accept()
-        print("Connection from: " + str(self.addr))
-        if not self.conn or not self.addr:
-            print("your connection isn't working")
-        #comeonman = "l\t"
-        #conn.send(comeonman.encode())
-        while True:
-            data = self.conn.recv(1024).decode()
-            if not data:
-                pass
-            else:
-                print("from connected user: " + str(data))
-                data = str(data)
-                data = data.strip()
-                self.conn.close()
-                self.mySocket.close()
-                return data
-        self.mySocket.close()
-        self.conn.close()
-        return data
->>>>>>> Stashed changes
 
 
         print("Closing everything...");
