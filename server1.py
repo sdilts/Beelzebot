@@ -1,23 +1,34 @@
 import socket
+import threading
+from queue import Queue
 import client
 import time
-import bodyControl as bc
+# import bodyControl as bc
 
 
 #########################     RECEIVES THINGS
 def wait_for_command(ip, port,roboControl, isStart=False):
+    if wait_for_command.server == None:
+        wait_for_command.server = Server(ip, port)
+        wait_for_command.server.run()
+        time.sleep(1)
     if isStart:
         client.say_phrase(ip, port, '', True, True)
     else:
         client.say_phrase(ip, port, '', True)
     time.sleep(1)
-    server = Server(ip, port, isStart)
-    command = server.run()
-    server.close()
-    time.sleep(.5)
-    print("wait_for_command just ran: ", command)
-    do_the_thing(command, ip, port,roboControl, isStart)
+    found = False
+    print("Waiting for command...")
+    while not found:
+        if not wait_for_command.server.recieved.empty():
+            found = True;
+            command = wait_for_command.server.recieved.get()
 
+    print("wait_for_command just ran: ", command)
+    # do_the_thing(command, ip, port,roboControl, isStart)
+    return command
+
+wait_for_command.server = None
 
 def do_the_thing(command, ip, port,roboControl, isStart=False):
     print("Command received in the place: ", command)
@@ -32,9 +43,9 @@ def do_the_thing(command, ip, port,roboControl, isStart=False):
         for i in range(2):
             roboControl.turn_clockwise()
             roboControl.turn_counterClockWise()
-      
+
         print('done dancing!')
-        
+
     elif command == 'start' and isStart:
         pass
     elif isStart:
@@ -45,20 +56,47 @@ def do_the_thing(command, ip, port,roboControl, isStart=False):
         wait_for_command(ip, port, roboControl)
 
 class Server:
-    
+
+<<<<<<< Updated upstream
+
+=======
+>>>>>>> Stashed changes
     def __init__(self,ip, port, isStart):
         self.host = '127.0.0.1'
         self.port = 5012
-        self.anIP = ip
-        self.conn = None
-        self.addr = None
-        self.anPort = port
-        self.mySocket = socket.socket()
-        self.mySocket.bind(('',self.port))
-        self.isStart = isStart
+
+    def stop(self):
+        print("Stopping thread...")
+        self.stopEvent.set()
+        # self.mySocket.close()
+        cl = client.Client("127.0.0.1", 5012, "", False)
+        cl.start()
+        cl.close()
+
+    def commandLoop(self, conn):
+        data = conn.recv(1024).decode()
+        conn.close()
+        self.recieved.put(data)
 
     def run(self):
+        self.stopEvent = threading.Event()
+        self.t = threading.Thread(target=self.serve)
+        self.t.start()
+
+    def serve(self):
+        # atexit.register(self.stop);
+        self.mySocket = socket.socket()
+        self.mySocket.bind(('',self.port))
         self.mySocket.listen(1)
+<<<<<<< Updated upstream
+        while not self.stopEvent.wait(1):
+            conn, addr = self.mySocket.accept()
+            print("Connection from: " + str(addr))
+            if not conn or not addr:
+                print("your connection isn't working")
+            self.commandLoop(conn)
+
+=======
         self.conn, self.addr = self.mySocket.accept()
         print("Connection from: " + str(self.addr))
         if not self.conn or not self.addr:
@@ -76,12 +114,12 @@ class Server:
                 self.conn.close()
                 self.mySocket.close()
                 return data
-
         self.mySocket.close()
         self.conn.close()
         return data
+>>>>>>> Stashed changes
 
 
-    def close(self):
+        print("Closing everything...");
         self.mySocket.close()
-        self.conn.close()
+        conn.close()

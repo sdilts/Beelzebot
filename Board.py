@@ -1,5 +1,8 @@
 import random
 import numpy as np
+from enum import Enum
+
+Location_types = Enum('Location_types', 'START END RECHARGE COFFEE EASY MED DIFFICULT FUN')
 
 class Board:
     layout =   m = { 1 : {'east' : 2},
@@ -30,7 +33,6 @@ class Board:
 
     def __init__(self):
         self._gen_locations()
-        self.end_pos = 2
 
     def _gen_start_end(self):
         edges = [[1,2,3,4], [25,24,23,22],  [5,10,15,20], [21,16,11,6]]
@@ -103,22 +105,40 @@ class Board:
         print("difficult:", difficult_monsters)
         print("fun:", fun_nodes)
 
+        places = {}
+        places[self.end_pos] = Location_types.END
+        places[self.start_pos] = Location_types.START
+        # Location_types = Enum('Location_types', 'END RECHARGE COFFEE EASY MED DIFFICULT FUN')
+        for n in easy_monsters:
+            places[n] = Location_types.EASY
+        for n in med_monsters:
+            places[n] = Location_types.MED
+        for n in difficult_monsters:
+            places[n] = Location_types.DIFFICULT
+        for n in fun_nodes:
+            places[n] = Location_types.FUN
+        for n in charging_stations:
+            places[n] = Location_types.RECHARGE
+        for n in coffee_shops:
+            places[n] = Location_types.COFFEE
+        self.places = places
 
     def _next_to(self, one, two):
         d = self.layout[one]
         return two in d.values()
 
-    def get_available(self, position):
+    def get_available_moves(self, position):
         return self.layout[position].keys()
 
-    def get_action(self, position):
-        pass
+    def get_loc_type(self, position):
+        return self.places[position]
+
+    def get_monster_at(self, position):
+
 
     def get_starting_pos(self):
         return self.start_pos;
 
-    def at_end_p(self, cur_pos):
-        return cur_pos == self.end_pos;
-
 
 b = Board()
+print(b.places)
