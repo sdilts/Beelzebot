@@ -111,7 +111,6 @@ class RobotController:
 
         for val in range(self.speedTable[self.moveScale], self.speedTable[newSpeed], step):
             self.controller.setTarget(1,val)
-            # print("Setting target to: ", val)
             time.sleep(.01)
         # time.sleep(.5)
         self.moveScale = newSpeed
@@ -134,8 +133,6 @@ class RobotController:
             self.setSpeed(self.moveScale - 1)
 
     def stop_moving(self):
-        #print("I'm a gunna stop moving")
-        #print("moveScale is: ", self.moveScale)
         newSpeed = self.moveScale
         while(self.moveScale != 0):
             if self.moveScale > 0:
@@ -156,7 +153,6 @@ class RobotController:
         self.stop_moving()
         if self.moveScale == 0 and not self.isTurning:
             self.isTurning = True
-            #TODO A THING
             # set turn "right" first:
             self.controller.setAccel(1,0)
             self.controller.setTarget(2,self.turn_clock)
@@ -165,7 +161,6 @@ class RobotController:
             self.controller.setTarget(2,self.turn_neutral)
             self.controller.setTarget(1, self.speedTable[0])
             self.controller.setAccel(1,1)
-         #   print("Turning Clockwise")
             self.isTurning = False
 
     def turn_counterClockWise(self):    
@@ -176,9 +171,8 @@ class RobotController:
             self.controller.setTarget(2,self.turn_counter_clock)
             self.controller.setTarget(1, self.speedTable[1])
             time.sleep(.5)
-            
+
             self.controller.setTarget(2,self.turn_neutral)
             self.controller.setTarget(1, self.speedTable[0])
             self.controller.setAccel(1,1)
-         #   print("Turning Counter Clockwise")
             self.isTurning = False
