@@ -1,5 +1,5 @@
 import board
-import server1 as server
+import server
 import client
 import time
 import random

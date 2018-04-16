@@ -6,9 +6,8 @@ def say_phrase(hostIP, port, data, waitForTalking, isStart=False):
     client.start()
     client.close()
     if waitForTalking:
-        time.sleep(2)
+        time.sleep(1)
 
-################################    SENDS THINGS
 class Client:
 
     def __init__(self, hostIP, port, data, isWait, isStart=False):
@@ -26,19 +25,7 @@ class Client:
             self.data = "s\t"
         self.data = self.data + data
 
-
-
-    #def say_phrase(self, phrase):
-        #self.data = phrase
-        #self.toSend = True
-
     def start(self):
-       
-        #while True:      
-            
-            #if not self.toSend:
-               
-            
         self.data = str(self.data)
         print("sending: " + str(self.data))
         self.mySocket.send(self.data.encode())
@@ -46,5 +33,3 @@ class Client:
 
     def close(self):
         self.mySocket.close()
-
-

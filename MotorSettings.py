@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter.font import Font
 from client import *
-from server1 import *
+from server import *
 
 class CommandSettings:
     def __init__(self, img):
@@ -10,7 +10,6 @@ class CommandSettings:
 
     def gen_command(self):
         pass
-
 
 class WaitTalkSettings(CommandSettings):
     def __init__(self, img, ip, port, roboControl):
@@ -24,7 +23,7 @@ class WaitTalkSettings(CommandSettings):
     def gen_command(self):
         print("Command: ", self.function_to_call)
         return lambda: self.function_to_call(self.ip, self.port, self.robo)
- 
+
     def draw_settings(self, parent_frame):
         if(self.opt_frame == None):
             self.opt_frame = tk.Frame(parent_frame, width = self.frame_width)
@@ -38,7 +37,6 @@ class WaitTalkSettings(CommandSettings):
             talkLabel4.grid(row=1, column=3)
         return self.opt_frame
 
-         
 class TalkSettings(CommandSettings):
     def __init__(self, img, root, hostIP, port):
         CommandSettings.__init__(self, img)
@@ -115,9 +113,6 @@ class StopSettings(CommandSettings):
             self.opt_frame = tk.Frame(parent_frame, width=self.frame_width)
         return self.opt_frame
 
-
-
-
 class MotorSettings(CommandSettings):
 
     def __init__(self,function_to_call,speed, img, maxSpeed=3):
@@ -132,7 +127,6 @@ class MotorSettings(CommandSettings):
 
     def __str__(self):
         return "(Function: {}, speed: {})".format(self.function_to_call, self.speed)
-
 
     def gen_command(self):
         print("Command: ", self.function_to_call, "Speed: ", self.speedEntry.get())
@@ -175,7 +169,6 @@ class ServoSettings(CommandSettings):
             for i in range(repeat_num):
                 self.function_to_call()
         return do_stuff
-
 
     def draw_settings(self, parent_frame):
         if (self.opt_frame == None):

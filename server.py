@@ -3,7 +3,6 @@ import threading
 from queue import Queue
 import client
 import time
-# import bodyControl as bc
 
 def get_command(ip, port):
     if wait_for_command.server == None:

@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from character import Character
-import server1 as server
+import server
 import client
 import sys
 import board
