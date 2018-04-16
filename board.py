@@ -4,7 +4,31 @@ from enum import Enum
 
 Location_types = Enum('Location_types', 'START END RECHARGE COFFEE EASY MED DIFFICULT FUN')
 
+class Monster:
+
+    def __init__(self, difficulty):
+        self.hp = 100
+        # self.difficulty = difficulty
+        if difficulty == Location_types.EASY:
+            self.difficulty = 10
+        elif difficulty == Location_types.MED:
+            self.difficulty = 25
+        elif difficulty == Location_types.DIFFICULT:
+            self.difficulty = 90
+
+    def isDead(self):
+        return self.hp <= 0
+
+    def throw_punch(self):
+        return int(random.uniform(0, self.difficulty))
+
+    def take_punch(self, lost):
+        self.hp -= lost
+        return self.hp
+
+
 class Board:
+
     layout =   m = { 1 : {'east' : 2},
     2 : {'west' : 1, 'south' : 7, 'east' : 3},
     3 : {'west' : 2, 'south' : 8},
@@ -16,7 +40,7 @@ class Board:
     9 : {'east' : 10, 'south' : 14},
     10 : {'north' : 5, 'south' : 15, 'west' : 9},
     11 : {'north' : 6, 'south' : 16},
-    12 : {'north' : 7},
+    12 : {'north' : 7, 'east' : 13},
     13 : {'west' : 12, 'east' : 14},
     14 : {'north' : 9, 'west' : 13, 'south' : 19},
     15 : {'north' : 10, 'south' : 20},
@@ -75,53 +99,74 @@ class Board:
         pos.remove(self.start_pos)
         pos.remove(self.end_pos)
 
-        charging_stations = self.find_values(3, pos)
-        pos = pos.difference(charging_stations)
+        self.charging_stations = self.find_values(3, pos)
+        pos = pos.difference(self.charging_stations)
 
-        coffee_shops = self.find_values(2, pos)
-        pos = pos.difference(coffee_shops)
+        self.coffee_shops = self.find_values(2, pos)
+        pos = pos.difference(self.coffee_shops)
 
         pos = list(pos)
         random.shuffle(pos)
-        easy_monsters = []
+        self.easy_monsters = []
         for i in pos[:7]:
-            easy_monsters.append(i)
-        med_monsters = []
+            self.easy_monsters.append(i)
+        self.med_monsters = []
         for i in pos[7:12]:
-            med_monsters.append(i)
-        difficult_monsters = []
+            self.med_monsters.append(i)
+        self.difficult_monsters = []
         for i in pos[12:15]:
-            difficult_monsters.append(i)
-        fun_nodes = []
+            self.difficult_monsters.append(i)
+        self.fun_nodes = []
         for i in pos[15:]:
-            fun_nodes.append(i)
+            self.fun_nodes.append(i)
 
-        print("Starting:\t", self.start_pos)
-        print("Ending:\t", self.end_pos)
-        print("Charging: ", charging_stations)
-        print("Coffee:", coffee_shops)
-        print("Easy:", easy_monsters)
-        print("med:", med_monsters)
-        print("difficult:", difficult_monsters)
-        print("fun:", fun_nodes)
+        self.print_stats()
 
+        self.monsters = {}
         places = {}
         places[self.end_pos] = Location_types.END
         places[self.start_pos] = Location_types.START
         # Location_types = Enum('Location_types', 'END RECHARGE COFFEE EASY MED DIFFICULT FUN')
-        for n in easy_monsters:
+        for n in self.easy_monsters:
+            self.monsters[n] = [] # self.make_monsters(Location_types.EASY)
             places[n] = Location_types.EASY
-        for n in med_monsters:
+        for n in self.med_monsters:
+            self.monsters[n] = [] # self.make_monsters(Location_types.MED)
             places[n] = Location_types.MED
-        for n in difficult_monsters:
+        for n in self.difficult_monsters:
+            self.monsters[n] = [] # self.make_monsters(Location_types.DIFFICULT)
             places[n] = Location_types.DIFFICULT
-        for n in fun_nodes:
+        for n in self.fun_nodes:
             places[n] = Location_types.FUN
-        for n in charging_stations:
+        for n in self.charging_stations:
             places[n] = Location_types.RECHARGE
-        for n in coffee_shops:
+        for n in self.coffee_shops:
             places[n] = Location_types.COFFEE
+
         self.places = places
+
+    def print_stats(self):
+        print("Board stats:")
+        print("#############################################")
+        print("Starting:\t", self.start_pos)
+        print("Ending:\t", self.end_pos)
+        print("Charging: ", self.charging_stations)
+        print("Coffee:", self.coffee_shops)
+        print("Easy:", self.easy_monsters)
+        print("med:", self.med_monsters)
+        print("difficult:", self.difficult_monsters)
+        print("fun:", self.fun_nodes)
+        print("#############################################")
+
+    def get_new_pos(self, position, direction):
+        return self.layout[position][direction]
+
+    def make_monsters(self, difficult):
+        if difficult ==  Location_types.DIFFICULT:
+            num_monsters = 1
+        else:
+            num_monsters = int(random.uniform(2, 6))
+        return [Monster(difficult) for i in range(num_monsters)]
 
     def _next_to(self, one, two):
         d = self.layout[one]
@@ -134,11 +179,14 @@ class Board:
         return self.places[position]
 
     def get_monster_at(self, position):
+        return self.monsters[position]
 
+    def at_end(self, position):
+        return self.end_pos == position
 
     def get_starting_pos(self):
         return self.start_pos;
 
 
-b = Board()
-print(b.places)
+# b = Board()
+# print(b.places)

@@ -5,6 +5,22 @@ import client
 import time
 # import bodyControl as bc
 
+def get_command(ip, port):
+    if wait_for_command.server == None:
+        wait_for_command.server = Server(ip, port)
+        wait_for_command.server.run()
+        time.sleep(1)
+    client.say_phrase(ip, port, '', True)
+    time.sleep(1)
+    found = False
+    print("Waiting for command...")
+    while not found:
+        if not wait_for_command.server.recieved.empty():
+            found = True;
+            command = wait_for_command.server.recieved.get()
+    print("get_command just recieved: ", command)
+    return command
+
 
 #########################     RECEIVES THINGS
 def wait_for_command(ip, port,roboControl, isStart=False):
