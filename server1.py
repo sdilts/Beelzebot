@@ -22,7 +22,6 @@ def get_command(ip, port):
     return command
 
 
-#########################     RECEIVES THINGS
 def wait_for_command(ip, port,roboControl, isStart=False):
     if wait_for_command.server == None:
         wait_for_command.server = Server(ip, port)
@@ -81,7 +80,7 @@ class Server:
         print("Stopping thread...")
         self.stopEvent.set()
         # self.mySocket.close()
-        cl = client.Client("127.0.0.1", 5012, "", False)
+        cl = client.Client("127.0.0.1", self.port, "", False)
         cl.start()
         cl.close()
 
