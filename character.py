@@ -3,19 +3,21 @@ import server1 as server
 import client
 import time
 import random
+from enum import Enum
 
 class Character:
 
     maxHP = 100
 
-    def __init__(self, ipAddr, portNum, my_board):
+    def __init__(self, ipAddr, portNum, my_board, controller):
         self.ipAddr = ipAddr
         self.portNum = portNum
         self.my_board = my_board
         self.position = self.my_board.get_starting_pos()
         print("Bot position: ",self.position)
         self.hp = self.maxHP
-        self.direction = "east"
+        self.direction = Direction.east
+        self.controller = controller
 
 
     def _say_stuff(self, message):
@@ -24,11 +26,44 @@ class Character:
         c.start()
         time.sleep(2)
 
+    def get_direction_number(self, direction):
+        if(direction == "north"):
+            return 1
+        elif(direction == "east"):
+            return 2
+        elif(direction == "south"):
+            return 3
+        elif(direction == "west"):
+            return 4
+        else:
+            return "invalid direction, this should break"
+
+    def turn(self, currDirection, newDirection):
+        currDirection = self.get_direction_number(currDirection)
+        newDirection = self.get_direction_number(newDirection)
+        
+        if(currDirection == newDirection):
+            return 0
+        else:
+            return currDirection - newDirection
+
     def move(self, new_pos, direction):
         """Gets input from the user, then moves the robot"""
-        self.position = new_pos
+        
         # robot stuff!
-        pass
+        to_turn = self.turn(self.direction, direction)
+        for i in range(abs(to_turn)):
+            if(to_turn < 0):
+                self.controller.turn_clockwise()
+            elif(to_turn > 0):
+                self.controller.turn_counterClockWise()
+            time.sleep(.25)
+            
+        self.controller.move_forward(2) #2 is the speed
+        time.sleep(1.5)
+        self.controller.stop_moving()
+        self.position = new_pos
+        print("We moved ", direction)
 
     def _move_where(self):
         foundDirection = False
