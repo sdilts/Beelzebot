@@ -5,3 +5,9 @@
 |     2 | turning motor |
 |     3 | Head tilt     |
 |     4 | head turn     |
+|    12 | shoulder      |
+|    13 | under shoulder|
+|    14 | elbow         |
+|    15 | under elbow   |
+|    16 | turn hand     |
+|    17 | clamps        |

@@ -4,12 +4,13 @@ import client
 import riddles
 import time
 import random
+from enum import Enum
 
 class Character:
 
     maxHP = 100
 
-    def __init__(self, ipAddr, portNum, my_board):
+    def __init__(self, ipAddr, portNum, my_board, controller):
         self.ipAddr = ipAddr
         self.portNum = portNum
         self.my_board = my_board
@@ -17,6 +18,7 @@ class Character:
         print("Bot position: ",self.position)
         self.hp = self.maxHP
         self.direction = "east"
+        self.controller = controller
 
 
     def _say_stuff(self, message):
@@ -25,11 +27,45 @@ class Character:
         c.start()
         time.sleep(2)
 
+    def get_direction_number(self, direction):
+        if(direction == "north"):
+            return 1
+        elif(direction == "east"):
+            return 2
+        elif(direction == "south"):
+            return 3
+        elif(direction == "west"):
+            return 4
+        else:
+            return "invalid direction, this should break"
+
+    def turn(self, currDirection, newDirection):
+        currDirection = self.get_direction_number(currDirection)
+        newDirection = self.get_direction_number(newDirection)
+        
+        if(currDirection == newDirection):
+            return 0
+        else:
+            return currDirection - newDirection
+
     def move(self, new_pos, direction):
         """Gets input from the user, then moves the robot"""
-        self.position = new_pos
+        
         # robot stuff!
-        pass
+        to_turn = self.turn(self.direction, direction)
+        for i in range(abs(to_turn)):
+            if(to_turn < 0):
+                self.controller.turn_clockwise()
+            elif(to_turn > 0):
+                self.controller.turn_counterClockWise()
+            time.sleep(.25)
+            
+        self.controller.move_forward(2) #2 is the speed
+        time.sleep(1.5)
+        self.controller.stop_moving()
+        self.position = new_pos
+        self.direction = direction
+        print("We moved ", direction)
 
     def _move_where(self):
         foundDirection = False
@@ -98,6 +134,14 @@ class Character:
                 roll = int(random.uniform(0, 4))
                 if roll == 1:
                     self._say_stuff("Egad! I can't escape!")
+                    for i in range(2)
+                        self.controller.move_head_left()
+                        time.sleep(.5)
+                        self.controller.move_head_right()
+                        self.controller.move_head_right()
+                        time.sleep(.5)
+                        self.controller.move_head_left()
+                    self.controller.reset_pos()
                     aliveFlag = self._initial_fight(monsters)
                 else:
                     self.goto_random_spot()
@@ -107,9 +151,17 @@ class Character:
     def _initial_fight(self, monsters):
         if self._fight(monsters) and self.isAlive():
             self._say_stuff("We have vanquished our foe!")
+            self.controller.move_shoulder_up()
+            self.controller.move_shoulder_up()
+            self.controller.twist_hand_left()
+            self.controller.twist_hand_left()
+            time.sleep(1)
+            self.controller.reset_pos()
             return True
         elif not self.isAlive():
             self._say_stuff("Game over")
+            self.controller.move_arms_down()
+            self.controller.move_head_down()
             return False;
         else:
             # return a truthy value that is not "True"
@@ -125,7 +177,21 @@ class Character:
     def _do_ninja(self):
         # look like a ninja:
         print("doing ninja things")
-        pass
+        self.controller.move_waist_left()
+        self.karate_chop()
+        self.controller.move_waist_right()
+        self.controller.move_waist_right()
+        self.karate_chop()
+        self.controller.reset_pos()
+
+    def karate_chop(self):
+        for i in range(2):
+            self.controller.move_shoulder_up()
+            self.controller.move_arms_up()
+            time.sleep(.5)
+            self.controller.move_shoulder_down()
+            self.controller.move_arms_down()
+            time.sleep(.5)
 
     def _fight(self, monsters):
         alive = list(filter(lambda x: not x.isDead(), monsters))

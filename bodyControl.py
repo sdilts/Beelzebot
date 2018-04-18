@@ -5,19 +5,30 @@ class RobotController:
     head_v_increment = 1
     head_h_increment = 1
     waist_increment = 1
+    arm_increment = 1
 
     servo_left_bound = 4100
     servo_right_bound = 7900
+
+    shoulder_left_bound = 4100
+    shoulder_right_bound = 6000
 
     head_v_channel = 4
     head_h_channel = 3
     waist_channel = 0
     turn_channel = 2
     move_channel = 1
+    arm_1_channel = 12
+    arm_2_channel = 13
+    arm_3_channel = 14
+    arm_4_channel = 15
+    arm_5_channel = 16
+    arm_6_channel = 17
 
     waist_increment = int((servo_right_bound - servo_left_bound) / 3)
     head_v_increment = int((servo_right_bound - servo_left_bound) / 5)
     head_h_increment = int((servo_right_bound - servo_left_bound) / 5)
+    arm_increment = int((servo_right_bound - servo_left_bound) / 5)
 
     max_backward_speed = 6700
     min_backward_speed = 7300
@@ -28,14 +39,23 @@ class RobotController:
     head_v_pos = 6000
     head_h_pos = 6000
     waist_pos = 6000
+    shoulder_pos = 6000
+    arm_pos = 6000
+    hand_twist_pos = 6000
 
     def __init__(self):
         self.controller = ma.Controller()
         self.controller.setAccel(self.head_v_channel, 8)
         self.controller.setAccel(self.head_h_channel, 8)
+        self.controller.setAccel(self.arm_1_channel, 8)
+        self.controller.setAccel(self.arm_2_channel, 8)
+        self.controller.setAccel(self.arm_3_channel, 8)
+        self.controller.setAccel(self.arm_4_channel, 8)
+        self.controller.setAccel(self.arm_5_channel, 8)
         self.controller.setAccel(self.waist_channel, 8)
         self.controller.setAccel(self.move_channel, 1)
         self.controller.setSpeed(self.turn_channel, 0)
+
 
     def clean_up():
         pass
@@ -58,14 +78,31 @@ class RobotController:
         else:
             return number
 
+    def correct_servo_shoulder_bounds(self, number, right_bound, left_bound):
+        if(number > right_bound):
+            return right_bound
+        elif(number < left_bound):
+            return left_bound
+        else:
+            return number
+
     def reset_pos(self):
         self.head_v_pos = 6000
         self.head_h_pos = 6000
         self.waist_pos = 6000
+        self.shoulder_pos = 6000
+        self.arm_pos = 6000
+        self.hand_twist_pos = 6000
         #set initial values
         self.controller.setTarget(self.head_v_channel, self.head_v_pos)
         self.controller.setTarget(self.head_h_channel, self.head_h_pos)
         self.controller.setTarget(self.waist_channel, self.waist_pos)
+        self.controller.setTarget(self.arm_1_channel, self.shoulder_pos)
+        self.controller.setTarget(self.arm_2_channel, 6500)
+        self.controller.setTarget(self.arm_3_channel, self.arm_pos)
+        self.controller.setTarget(self.arm_4_channel, self.arm_pos)
+        self.controller.setTarget(self.arm_5_channel, self.hand_twist_pos)
+        
         pass
 
     def move_head_up(self):
@@ -90,10 +127,43 @@ class RobotController:
     def move_waist_right(self):
         self.waist_pos = self.move_servo(self.waist_pos, -self.waist_increment, self.waist_channel)
 
+    def move_shoulder_down(self):
+        self.shoulder_pos = self.move_servo_shoulder(self.shoulder_pos, self.arm_increment, self.arm_1_channel, self.shoulder_right_bound, self.shoulder_left_bound)
+        #print("current position: ", self.shoulder_pos)
+
+    def move_shoulder_up(self):
+        self.shoulder_pos = self.move_servo_shoulder(self.shoulder_pos, -self.arm_increment, self.arm_1_channel, self.shoulder_right_bound, self.shoulder_left_bound)
+        #print("current position: ", self.shoulder_pos)
+
+    def move_arms_up(self):
+        #self.arm_pos = self.move_servo(self.arm_pos, self.arm_increment, self.arm_2_channel)
+        self.arm_pos = self.move_servo(self.arm_pos, self.arm_increment, self.arm_3_channel)
+        self.arm_pos = self.move_servo(self.arm_pos, self.arm_increment, self.arm_4_channel)
+        #self.arm_pos = self.move_servo(self.arm_pos, self.arm_increment, self.arm_5_channel)
+        #print("current_pos", self.arm_pos)
+
+    def move_arms_down(self):
+        #self.arm_pos = self.move_servo(self.arm_pos, -self.arm_increment, self.arm_2_channel)
+        self.arm_pos = self.move_servo(self.arm_pos, -self.arm_increment, self.arm_3_channel)
+        self.arm_pos = self.move_servo(self.arm_pos, -self.arm_increment, self.arm_4_channel)
+        #self.arm_pos = self.move_servo(self.arm_pos, -self.arm_increment, self.arm_5_channel)
+        #print("current_pos", self.arm_pos)
+
+    def twist_hand_left(self):
+        self.hand_twist_pos = self.move_servo(self.hand_twist_pos, -self.arm_increment, self.arm_5_channel)
+
+    def twist_hand_right(self):
+        self.hand_twist_pos = self.move_servo(self.hand_twist_pos, self.arm_increment, self.arm_5_channel)
 
     def move_servo(self,oldPos, change, channel):
         newPos = oldPos + change
         newPos = self.correct_servo_bounds(newPos)
+        self.controller.setTarget(channel, newPos)
+        return newPos
+
+    def move_servo_shoulder(self, oldPos, change, channel, right_bound, left_bound):
+        newPos = oldPos + change
+        newPos = self.correct_servo_shoulder_bounds(newPos, right_bound, left_bound)
         self.controller.setTarget(channel, newPos)
         return newPos
 
