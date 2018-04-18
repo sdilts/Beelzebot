@@ -128,6 +128,14 @@ class Character:
                 roll = int(random.uniform(0, 4))
                 if roll == 1:
                     self._say_stuff("Egad! I can't escape!")
+                    for i in range(2)
+                        self.controller.move_head_left()
+                        time.sleep(.5)
+                        self.controller.move_head_right()
+                        self.controller.move_head_right()
+                        time.sleep(.5)
+                        self.controller.move_head_left()
+                    self.controller.reset_pos()
                     aliveFlag = self._initial_fight(monsters)
                 else:
                     self.goto_random_spot()
@@ -137,9 +145,17 @@ class Character:
     def _initial_fight(self, monsters):
         if self._fight(monsters) and self.isAlive():
             self._say_stuff("We have vanquished our foe!")
+            self.controller.move_shoulder_up()
+            self.controller.move_shoulder_up()
+            self.controller.twist_hand_left()
+            self.controller.twist_hand_left()
+            time.sleep(1)
+            self.controller.reset_pos()
             return True
         elif not self.isAlive():
             self._say_stuff("Game over")
+            self.controller.move_arms_down()
+            self.controller.move_head_down()
             return False;
         else:
             # return a truthy value that is not "True"
@@ -155,7 +171,21 @@ class Character:
     def _do_ninja(self):
         # look like a ninja:
         print("doing ninja things")
-        pass
+        self.controller.move_waist_left()
+        self.karate_chop()
+        self.controller.move_waist_right()
+        self.controller.move_waist_right()
+        self.karate_chop()
+        self.controller.reset_pos()
+
+    def karate_chop(self):
+        for i in range(2):
+            self.controller.move_shoulder_up()
+            self.controller.move_arms_up()
+            time.sleep(.5)
+            self.controller.move_shoulder_down()
+            self.controller.move_arms_down()
+            time.sleep(.5)
 
     def _fight(self, monsters):
         alive = list(filter(lambda x: not x.isDead(), monsters))
