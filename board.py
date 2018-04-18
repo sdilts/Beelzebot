@@ -1,4 +1,5 @@
 import random
+import riddles
 import numpy as np
 from enum import Enum
 
@@ -123,6 +124,7 @@ class Board:
         self.print_stats()
 
         self.monsters = {}
+        self.riddles = {}
         places = {}
         places[self.end_pos] = Location_types.END
         places[self.start_pos] = Location_types.START
@@ -136,7 +138,9 @@ class Board:
         for n in self.difficult_monsters:
             self.monsters[n] = [] # self.make_monsters(Location_types.DIFFICULT)
             places[n] = Location_types.DIFFICULT
-        for n in self.fun_nodes:
+        for index, n in enumerate(self.fun_nodes):
+            # positions are always random, so this is okay:
+            self.riddles[n] = riddles.riddles[index], False
             places[n] = Location_types.FUN
         for n in self.charging_stations:
             places[n] = Location_types.RECHARGE
@@ -181,6 +185,11 @@ class Board:
     def get_monster_at(self, position):
         return self.monsters[position]
 
+    def get_riddle_at(self, position):
+        to_return = self.riddles[position]
+        self.riddles[position] = (riddles.get_riddle_part(self.riddles[position]), True)
+        return to_return
+
     def at_end(self, position):
         return self.end_pos == position
 
@@ -188,5 +197,5 @@ class Board:
         return self.start_pos;
 
 
-# b = Board()
-# print(b.places)
+if __name__ == "__main__":
+    b = Board()

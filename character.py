@@ -1,6 +1,7 @@
 import board
 import server
 import client
+import riddles
 import time
 import random
 
@@ -54,6 +55,7 @@ class Character:
         # Ask for movement, make movement, do thing at node
         new_pos, direction = self._move_where()
         self.move(new_pos, direction)
+        print("Now at position: ", new_pos)
         loc_type = self.my_board.get_loc_type(new_pos)
         if loc_type == board.Location_types.START:
             self._say_stuff("You are at the starting position")
@@ -63,14 +65,18 @@ class Character:
             return True
         elif loc_type == board.Location_types.RECHARGE:
             self.hp = self.maxHP
-            self._say_stuff("Recharged")
+            self._say_stuff("Beep boop beep. I'm feeling nice and Recharged")
             time.sleep(3)
             return True
         elif loc_type == board.Location_types.COFFEE:
             print("At coffee shop")
             return True
         elif loc_type == board.Location_types.FUN:
-            print("We are doing fun things!")
+            riddle = self.my_board.get_riddle_at(self.position)
+            if not riddle[1]:
+                riddles.play_riddle(self.ipAddr, self.portNum, riddle[0])
+            else:
+                self._say_stuff("A riddle was solved here. It was: " + riddles.get_riddle_part(riddle[0]))
         else:
             monsters = self.my_board.get_monster_at(self.position)
             result = self._initial_fight(monsters)
