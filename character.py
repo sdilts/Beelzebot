@@ -16,7 +16,7 @@ class Character:
         self.position = self.my_board.get_starting_pos()
         print("Bot position: ",self.position)
         self.hp = self.maxHP
-        self.direction = Direction.east
+        self.direction = "east"
         self.controller = controller
 
 
@@ -63,6 +63,7 @@ class Character:
         time.sleep(1.5)
         self.controller.stop_moving()
         self.position = new_pos
+        self.direction = direction
         print("We moved ", direction)
 
     def _move_where(self):
