@@ -5,10 +5,13 @@ import server1 as server
 import client
 import sys
 import board
+from bodyControl import *
 
 def run_game(ipAddr, portNum):
     b = board.Board()
-    bot = Character(ipAddr, portNum, b)
+    controller = RobotController()
+    controller.reset_pos()
+    bot = Character(ipAddr, portNum, b, controller)
     try:
         while (not b.at_end(bot.position)) and bot.isAlive():
             bot.take_turn()
