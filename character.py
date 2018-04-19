@@ -4,6 +4,7 @@ import client
 import riddles
 import time
 import random
+from dist_funcs import shortestPathLoc
 from enum import Enum
 
 class Character:
@@ -106,6 +107,11 @@ class Character:
             return True
         elif loc_type == board.Location_types.COFFEE:
             print("At coffee shop")
+            msg_string = "The ending spot is on the " + self.my_board.get_end_side() + " side."
+            msg_string += "You must go " + shortestPathLoc(self.my_board, self.position, my_board.get_end_pos()) + "from here!"
+            print(msg_string)
+            self._say_stuff(msg_string)
+            time.sleep(3)
             return True
         elif loc_type == board.Location_types.FUN:
             riddle = self.my_board.get_riddle_at(self.position)

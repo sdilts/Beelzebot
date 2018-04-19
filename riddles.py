@@ -5,12 +5,14 @@ import server
 import client
 
 # riddles courtesy of The LOTR and The Hobbit:
-riddles = random.shuffle([("A box without hinges, key, or lid, yet golden treasures inside is hid", re.compile('.*egg *.*', re.IGNORECASE)),
+riddles = [("A box without hinges, key, or lid, yet golden treasures inside is hid", re.compile('.*egg *.*', re.IGNORECASE)),
            ("What has roots as nobody sees, Is taller than trees, Up, up it goes, And yet never grows?", re.compile(".*mountain*.*", re.IGNORECASE)),
            ("Voicelss it cries, Wingless flutters, Toothless bites, Mouthless mutters", re.compile(".* wind *.*", re.IGNORECASE)),
            ("Speak Friend, and enter", re.compile(".*friend *.*", re.IGNORECASE)),
            # now for one I found off of the internet:
-           ("I have keys but no locks. I have a space but no room. You can enter, but can't go outside. What am I?", re.compile(".*keyboard *.*", re.IGNORECASE))])
+           ("I have keys but no locks. I have a space but no room. You can enter, but can't go outside. What am I?", re.compile(".*keyboard *.*", re.IGNORECASE))]
+
+# random.shuffle(riddles)
 
 
 def say_stuff(message, ipAddr, portNum):
@@ -58,4 +60,3 @@ def play_riddle(ip, port, riddle):
 if __name__ == "__main__":
     import sys
     play_riddle(sys.argv[1], sys.argv[2], get_riddle())
-    
