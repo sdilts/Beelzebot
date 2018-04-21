@@ -30,7 +30,7 @@ class Monster:
 
 class Board:
 
-    layout =   m = { 1 : {'east' : 2},
+    layout = { 1 : {'east' : 2},
     2 : {'west' : 1, 'south' : 7, 'east' : 3},
     3 : {'west' : 2, 'south' : 8},
     4 : {'east' : 5},
@@ -60,14 +60,17 @@ class Board:
         self._gen_locations()
 
     def _gen_start_end(self):
-        edges = [[1,2,3,4], [25,24,23,22],  [5,10,15,20], [21,16,11,6]]
-        start_index = random.sample(range(len(edges)), 1)[0]
+        sides = ["north", "south", "east", "west"]
+        edges = [[1,2,3,4], [22,23,24,25],  [5,10,15,20], [6,11,16,21]]
+        start_index = random.choice(range(len(edges)))
         if start_index % 2 == 0:
             # go back:
             end_index = start_index + 1
         else:
             # go forward
             end_index = start_index - 1
+        # probably shouldn't go in this function. Oh well...
+        self.end_side = sides[end_index]
         start_pos = random.choice(edges[start_index])
         end_pos = random.choice(edges[end_index])
         return start_pos, end_pos
@@ -140,7 +143,7 @@ class Board:
             places[n] = Location_types.DIFFICULT
         for index, n in enumerate(self.fun_nodes):
             # positions are always random, so this is okay:
-            self.riddles[n] = riddles.riddles[index], False
+            self.riddles[n] = (riddles.riddles[index], False)
             places[n] = Location_types.FUN
         for n in self.charging_stations:
             places[n] = Location_types.RECHARGE
@@ -195,6 +198,12 @@ class Board:
 
     def get_starting_pos(self):
         return self.start_pos;
+
+    def get_end_side(self):
+        return self.end_side
+
+    def get_end_pos(self):
+        return self.end_pos
 
 
 if __name__ == "__main__":

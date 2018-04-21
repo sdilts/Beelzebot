@@ -8,6 +8,11 @@ def say_phrase(hostIP, port, data, waitForTalking, isStart=False):
     if waitForTalking:
         time.sleep(1)
 
+def say_stuff(hostIP, port, statement):
+    client = Client(hostIP, port, statement, False)
+    client.start()
+    time.sleep(2)
+
 class Client:
 
     def __init__(self, hostIP, port, data, isWait, isStart=False):

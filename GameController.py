@@ -29,4 +29,5 @@ def run_game(ipAddr, portNum):
         if server.wait_for_command.server:
             server.wait_for_command.server.stop()
 
-run_game(sys.argv[1], sys.argv[2])
+if __name__ == "__main__":
+    run_game(sys.argv[1], sys.argv[2])

@@ -4,6 +4,7 @@ import client
 import riddles
 import time
 import random
+from dist_funcs import shortestPathLoc
 from enum import Enum
 
 class Character:
@@ -20,12 +21,8 @@ class Character:
         self.direction = "east"
         self.controller = controller
 
-
     def _say_stuff(self, message):
-        c = client.Client(self.ipAddr, self.portNum, message,
-                          False)
-        c.start()
-        time.sleep(2)
+        client.say_stuff(self.ipAddr, self.portNum, messasge)
 
     def get_direction_number(self, direction):
         if(direction == "north"):
@@ -106,6 +103,11 @@ class Character:
             return True
         elif loc_type == board.Location_types.COFFEE:
             print("At coffee shop")
+            msg_string = "The ending spot is on the " + self.my_board.get_end_side() + " side."
+            msg_string += "You must go " + shortestPathLoc(self.my_board, self.position, my_board.get_end_pos()) + "from here!"
+            print(msg_string)
+            self._say_stuff(msg_string)
+            time.sleep(3)
             return True
         elif loc_type == board.Location_types.FUN:
             riddle = self.my_board.get_riddle_at(self.position)
@@ -172,7 +174,6 @@ class Character:
         to_go = random.choice(choices)
         new_pos = self.my_board.get_new_pos(self.position, to_go)
         self.move(new_pos, to_go)
-
 
     def _do_ninja(self):
         # look like a ninja:
