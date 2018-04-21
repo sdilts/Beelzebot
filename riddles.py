@@ -15,11 +15,6 @@ riddles = [("A box without hinges, key, or lid, yet golden treasures inside is h
 # random.shuffle(riddles)
 
 
-def say_stuff(message, ipAddr, portNum):
-    c = client.Client(ipAddr, portNum, message,
-                      False)
-    c.start()
-    time.sleep(2)
 
 def get_riddle():
     global riddles
@@ -27,13 +22,6 @@ def get_riddle():
 
 def get_riddle_part(riddle):
     return riddle[0]
-
-def check_riddle(guess):
-    global riddles
-    for riddle, regex in riddles:
-        if regex.match(guess):
-            return True
-    return False
 
 denials = ["No! You shall never leave!", "Mwahaha! Thats not it!"]
 
