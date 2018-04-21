@@ -21,12 +21,8 @@ class Character:
         self.direction = "east"
         self.controller = controller
 
-
     def _say_stuff(self, message):
-        c = client.Client(self.ipAddr, self.portNum, message,
-                          False)
-        c.start()
-        time.sleep(2)
+        client.say_stuff(self.ipAddr, self.portNum, messasge)
 
     def get_direction_number(self, direction):
         if(direction == "north"):
@@ -178,7 +174,6 @@ class Character:
         to_go = random.choice(choices)
         new_pos = self.my_board.get_new_pos(self.position, to_go)
         self.move(new_pos, to_go)
-
 
     def _do_ninja(self):
         # look like a ninja:
