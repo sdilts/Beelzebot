@@ -3,6 +3,8 @@ import re
 import time
 import server
 import client
+from client import say_stuff
+
 
 # riddles courtesy of The LOTR and The Hobbit:
 riddles = [("A box without hinges, key, or lid, yet golden treasures inside is hid", re.compile('.*egg *.*', re.IGNORECASE)),

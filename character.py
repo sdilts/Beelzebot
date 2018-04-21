@@ -4,14 +4,17 @@ import client
 import riddles
 import time
 import random
-from dist_funcs import shortestPathLoc
+from dist_funcs import get_hint
 from enum import Enum
+from PyQt5.QtCore import QObject, pyqtSignal
 
-class Character:
+class Character(QObject):
 
     maxHP = 100
+    changed_location = pyqtSignal(board.Location_types, name='changed_location')
 
-    def __init__(self, ipAddr, portNum, my_board, controller):
+    def __init__(self,ipAddr, portNum, my_board, controller, parent=None):
+        QObject.__init__(self, parent)
         self.ipAddr = ipAddr
         self.portNum = portNum
         self.my_board = my_board
@@ -22,7 +25,7 @@ class Character:
         self.controller = controller
 
     def _say_stuff(self, message):
-        client.say_stuff(self.ipAddr, self.portNum, messasge)
+        client.say_stuff(self.ipAddr, self.portNum, message)
 
     def get_direction_number(self, direction):
         if(direction == "north"):
@@ -39,7 +42,7 @@ class Character:
     def turn(self, currDirection, newDirection):
         currDirection = self.get_direction_number(currDirection)
         newDirection = self.get_direction_number(newDirection)
-        
+
         if(currDirection == newDirection):
             return 0
         else:
@@ -47,7 +50,7 @@ class Character:
 
     def move(self, new_pos, direction):
         """Gets input from the user, then moves the robot"""
-        
+
         # robot stuff!
         to_turn = self.turn(self.direction, direction)
         for i in range(abs(to_turn)):
@@ -56,7 +59,7 @@ class Character:
             elif(to_turn > 0):
                 self.controller.turn_counterClockWise()
             time.sleep(.25)
-            
+
         self.controller.move_forward(2) #2 is the speed
         time.sleep(1.5)
         self.controller.stop_moving()
@@ -90,6 +93,7 @@ class Character:
         self.move(new_pos, direction)
         print("Now at position: ", new_pos)
         loc_type = self.my_board.get_loc_type(new_pos)
+        self.changed_location.emit(loc_type)
         if loc_type == board.Location_types.START:
             self._say_stuff("You are at the starting position")
             return True
@@ -104,7 +108,7 @@ class Character:
         elif loc_type == board.Location_types.COFFEE:
             print("At coffee shop")
             msg_string = "The ending spot is on the " + self.my_board.get_end_side() + " side."
-            msg_string += "You must go " + shortestPathLoc(self.my_board, self.position, my_board.get_end_pos()) + "from here!"
+            msg_string += "You must go " + get_hint(self.my_board, self.position, self.my_board.get_end_pos()) + "from here!"
             print(msg_string)
             self._say_stuff(msg_string)
             time.sleep(3)
@@ -136,7 +140,7 @@ class Character:
                 roll = int(random.uniform(0, 4))
                 if roll == 1:
                     self._say_stuff("Egad! I can't escape!")
-                    for i in range(2)
+                    for i in range(2):
                         self.controller.move_head_left()
                         time.sleep(.5)
                         self.controller.move_head_right()
