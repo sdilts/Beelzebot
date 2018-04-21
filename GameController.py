@@ -107,7 +107,7 @@ class Display_game(QMainWindow):
         elif new_location == board.Location_types.COFFEE:
             pixmap = QtGui.QPixmap("gui_images/coffee_shop.png")
         elif new_location == board.Location_types.EASY:
-            pixmap = QtGui.QPixmap("gui_images/little_troll.jpg")
+            pixmap = QtGui.QPixmap("gui_images/blob_monster.png")
         elif new_location == board.Location_types.MED:
             pixmap = QtGui.QPixmap("gui_images/goblin.png")
         elif new_location == board.Location_types.DIFFICULT:
