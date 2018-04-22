@@ -50,6 +50,8 @@ def run_game(bot, b, ipAddr, portNum):
 
 class Display_game(QMainWindow):
 
+    image_size = 480
+
     def __init__(self, ipAddr, portNum, parent=None):
         QObject.__init__(self, parent)
 
@@ -70,7 +72,7 @@ class Display_game(QMainWindow):
 
         self.image_label = QLabel(self)
         pixmap = QtGui.QPixmap("gui_images/entrance.jpg")
-        pixmap.scaled(500,500, PyQt5.QtCore.Qt.KeepAspectRatio)
+        pixmap = pixmap.scaled(self.image_size,self.image_size, PyQt5.QtCore.Qt.KeepAspectRatio)
         self.image_label.setPixmap(pixmap)
         self.image_label.setAlignment(PyQt5.QtCore.Qt.AlignCenter)
 
@@ -88,6 +90,7 @@ class Display_game(QMainWindow):
         self.setCentralWidget(self.centralWidget)
 
     def end_game(self):
+        self.showNormal()
         print("Ending game")
 
     def start_playing(self):
@@ -115,7 +118,7 @@ class Display_game(QMainWindow):
         elif new_location == board.Location_types.FUN:
             pixmap = QtGui.QPixmap("gui_images/eyes.jpg")
 
-        pixmap.scaled(500,500, PyQt5.QtCore.Qt.KeepAspectRatio)
+        pixmap = pixmap.scaled(self.image_size,self.image_size, PyQt5.QtCore.Qt.KeepAspectRatio)
         self.image_label.setPixmap(pixmap)
         self.image_label.repaint()
 
@@ -125,5 +128,5 @@ if __name__ == "__main__":
     # run_game(sys.argv[1], sys.argv[2])
     app = QApplication(sys.argv)
     myWidget = Display_game("10.152.166.102", 5015)
-    myWidget.show()
+    myWidget.showFullScreen()
     app.exec_()
