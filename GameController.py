@@ -2,6 +2,7 @@
 
 from character import Character
 import server
+import queue
 import client
 import sys
 import board
@@ -22,35 +23,39 @@ class GameThread(QtCore.QThread):
         self.board = board
         self.ipAddr = ipAddr
         self.portNum = portNum
+        self.queue = queue.Queue()
 
     def run(self):
-        run_game(self.bot, self.board, self.ipAddr, self.portNum)
+        self.run_game()
         self.quit()
         self.terminate()
 
+    def run_game(self):
+        # bot = Character(ipAddr, portNum, b, controller)
+        try:
+            while (not self.board.at_end(self.bot.position)) and self.bot.isAlive():
+                # if not self.queue.empty():
+                #     print("Quiting the game")
+                #     raise Exception
+                self.bot.take_turn()
+                self.board.print_stats()
+            if not self.bot.isAlive():
+                print("Done!")
+                client.say_phrase(self.ipAddr, self.portNum, "Better luck next time!", False)
+            else:
+                client.say_phrase(self.ipAddr, self.portNum, "We are victorious!", False)
 
-def run_game(bot, b, ipAddr, portNum):
-    # bot = Character(ipAddr, portNum, b, controller)
-    try:
-        while (not b.at_end(bot.position)) and bot.isAlive():
-            bot.take_turn()
-            b.print_stats()
-        if not bot.isAlive():
-            print("Done!")
-            client.say_phrase(ipAddr, portNum, "Better luck next time!", False)
-        else:
-            client.say_phrase(ipAddr, portNum, "We are victorious!", False)
-
-        if server.wait_for_command.server:
-            server.wait_for_command.server.stop()
-    except Exception as e:
-        traceback.print_exc()
-        if server.wait_for_command.server:
-            server.wait_for_command.server.stop()
+            if server.wait_for_command.server:
+                server.wait_for_command.server.stop()
+        except Exception as e:
+            traceback.print_exc()
+            if server.wait_for_command.server:
+                server.wait_for_command.server.stop()
 
 class Display_game(QMainWindow):
 
     image_size = 480
+    end_signal = pyqtSignal(name='end_signal')
 
     def __init__(self, ipAddr, portNum, parent=None):
         QObject.__init__(self, parent)
@@ -90,12 +95,13 @@ class Display_game(QMainWindow):
         self.setCentralWidget(self.centralWidget)
 
     def end_game(self):
+        self.thread.queue.put(True)
         self.showNormal()
         print("Ending game")
 
     def start_playing(self):
         self.thread = GameThread(self.bot, self.b, self.ipAddr, self.portNum)
-        self.thread.run()
+        self.thread.start()
 
     def change_picture(self, new_location):
         print("********************************")
