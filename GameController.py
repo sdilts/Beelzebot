@@ -23,7 +23,6 @@ class GameThread(QtCore.QThread):
         self.board = board
         self.ipAddr = ipAddr
         self.portNum = portNum
-        self.queue = queue.Queue()
 
     def run(self):
         self.run_game()
@@ -95,7 +94,6 @@ class Display_game(QMainWindow):
         self.setCentralWidget(self.centralWidget)
 
     def end_game(self):
-        self.thread.queue.put(True)
         self.showNormal()
         print("Ending game")
 
