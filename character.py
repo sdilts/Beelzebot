@@ -159,14 +159,19 @@ class Character(QObject):
             self._say_stuff("We have vanquished our foe!")
             self.controller.move_shoulder_up()
             self.controller.move_shoulder_up()
+            self.controller.move_shoulder_up2()
+            self.controller.move_shoulder_up2()
             self.controller.twist_hand_left()
             self.controller.twist_hand_left()
+            self.controller.twist_hand_left2()
+            self.controller.twist_hand_left2()
             time.sleep(1)
             self.controller.reset_pos()
             return True
         elif not self.isAlive():
             self._say_stuff("Game over")
             self.controller.move_arms_down()
+            self.controller.move_arms_down2()
             self.controller.move_head_down()
             return False;
         else:
@@ -190,10 +195,14 @@ class Character(QObject):
         self.controller.reset_pos()
 
     def karate_chop(self):
-        for i in range(2):
+        for i in range(3):
             self.controller.move_shoulder_up()
             self.controller.move_arms_up()
+            self.controller.move_shoulder_down2()
+            self.controller.move_arms_down2()
             time.sleep(.5)
+            self.controller.move_shoulder_up2()
+            self.controller.move_arms_up2()
             self.controller.move_shoulder_down()
             self.controller.move_arms_down()
             time.sleep(.5)
